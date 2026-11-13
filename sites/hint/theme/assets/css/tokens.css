@@ -1,0 +1,74 @@
+/**
+ * HINT Design Tokens
+ * International Congress of Human-centred Inclusive New Technologies
+ *
+ * Source of truth for the visual system used alongside Elementor Site Settings.
+ * Style: minimalista, editorial, tecnológico e humano (Slush, mais sóbrio).
+ */
+
+:root {
+	/* ——— Colors ——— */
+	--hint-color-bg: #F7F6F2;
+	--hint-color-text: #111111;
+	--hint-color-text-secondary: #666663;
+	/* Brand blue + global hover (chrome, links, buttons). */
+	--hint-color-accent: #03e8fc;
+	--hint-color-accent-hover: #f5119e;
+	--hint-color-accent-dark: #111111;
+	--hint-color-accent-on-dark: var(--hint-color-accent);
+	--hint-color-border: #D9D9D4;
+	--hint-color-on-accent: #111111;
+
+	/* Aliases (readable intent) */
+	--hint-color-background: var(--hint-color-bg);
+	--hint-color-primary-text: var(--hint-color-text);
+	--hint-color-hint-blue: var(--hint-color-accent);
+
+	/* ——— Typography ——— */
+	--hint-font-heading: "Space Grotesk", sans-serif;
+	--hint-font-body: "Inter", sans-serif;
+
+	--hint-weight-regular: 400;
+	--hint-weight-medium: 500;
+	--hint-weight-semibold: 600;
+	--hint-weight-bold: 700;
+
+	/* Desktop type scale */
+	--hint-text-h1: 64px;
+	--hint-text-h2: 48px;
+	--hint-text-h3: 32px;
+	--hint-text-h4: 24px;
+	--hint-text-body: 18px;
+	--hint-text-small: 14px;
+
+	--hint-leading-heading: 1.1;
+	--hint-leading-body: 1.6;
+
+	/* ——— Spacing scale (8-based) ——— */
+	--hint-space-1: 8px;
+	--hint-space-2: 16px;
+	--hint-space-3: 24px;
+	--hint-space-4: 32px;
+	--hint-space-5: 48px;
+	--hint-space-6: 64px;
+	--hint-space-7: 96px;
+	--hint-space-8: 128px;
+
+	/* ——— Geometry ——— */
+	--hint-radius-sm: 4px;
+	--hint-radius-md: 8px;
+	--hint-radius: var(--hint-radius-sm);
+	--hint-border-width: 1px;
+
+	/* ——— Elevation (intentionally flat) ——— */
+	--hint-shadow: none;
+}
+
+@media (max-width: 767px) {
+	:root {
+		--hint-text-h1: 42px;
+		--hint-text-h2: 36px;
+		--hint-text-h3: 28px;
+		--hint-text-body: 16px;
+	}
+}

@@ -1,0 +1,47 @@
+/**
+ * HINT Base
+ * Soft visual rules for the Hello Elementor + Elementor Free stack.
+ * Does not build pages — only reinforces the design system.
+ */
+
+html {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+body {
+	background-color: var(--hint-color-bg);
+	color: var(--hint-color-text);
+}
+
+/* Prefer flat UI: no decorative gradients or strong shadows from theme chrome */
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Thin geometric rules helper */
+.hint-rule {
+	display: block;
+	width: 100%;
+	height: 0;
+	margin: 0;
+	border: 0;
+	border-top: var(--hint-border-width) solid var(--hint-color-border);
+}
+
+/* Quiet secondary text */
+.hint-text-secondary {
+	color: var(--hint-color-text-secondary);
+}
+
+.hint-text-accent {
+	color: var(--hint-color-accent);
+}
+
+/* Whitespace helpers (optional utility classes for Elementor Custom CSS Class) */
+.hint-space-y-3 > * + * { margin-top: var(--hint-space-3); }
+.hint-space-y-4 > * + * { margin-top: var(--hint-space-4); }
+.hint-space-y-5 > * + * { margin-top: var(--hint-space-5); }
+.hint-space-y-6 > * + * { margin-top: var(--hint-space-6); }

@@ -1,0 +1,28 @@
+# Segredos
+.env
+.env.*
+!.env.example
+
+# Dados locais e backups
+backups/
+*.sql
+*.sql.gz
+*.tgz
+
+# Gerados
+platform/build/out/
+node_modules/
+vendor/
+.phpunit.cache/
+tests/output/
+
+# Editor / SO
+.vscode/*
+!.vscode/extensions.json
+*.code-workspace
+.idea/
+.DS_Store
+Thumbs.db
+
+# Claude Code (pessoal)
+.claude/settings.local.json

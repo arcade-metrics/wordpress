@@ -1,0 +1,84 @@
+/**
+ * HINT Components
+ * Lightweight helpers for Elementor widgets (via CSS Class).
+ */
+
+/* ——— Flat controls (no strong shadows) ——— */
+.elementor-button,
+button,
+input[type="button"],
+input[type="submit"] {
+	box-shadow: none !important;
+	text-shadow: none !important;
+}
+
+/* ——— Soft radius on Elementor buttons ——— */
+.elementor-button {
+	border-radius: var(--hint-radius);
+}
+
+/* ——— Secondary button ———
+ * In Elementor Button → Advanced → CSS Classes: hint-button-secondary
+ */
+.elementor-button.hint-button-secondary,
+a.elementor-button.hint-button-secondary {
+	background-color: transparent !important;
+	background-image: none !important;
+	border-style: solid !important;
+	border-width: var(--hint-border-width) !important;
+	border-color: var(--hint-color-text) !important;
+	color: var(--hint-color-text) !important;
+	border-radius: var(--hint-radius) !important;
+	box-shadow: none !important;
+}
+
+.elementor-button.hint-button-secondary:hover,
+.elementor-button.hint-button-secondary:focus,
+a.elementor-button.hint-button-secondary:hover,
+a.elementor-button.hint-button-secondary:focus {
+	background-color: transparent !important;
+	border-color: var(--hint-color-accent-hover) !important;
+	color: var(--hint-color-accent-hover) !important;
+}
+
+/* ——— Wordmark: HINT · 2027 ———
+ * Use on an HTML widget or heading with class hint-logo
+ */
+.hint-logo {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.35em;
+	font-family: var(--hint-font-heading);
+	font-weight: var(--hint-weight-bold);
+	font-size: clamp(1.25rem, 2vw, 1.75rem);
+	line-height: 1;
+	letter-spacing: -0.02em;
+	text-decoration: none;
+	color: var(--hint-color-text);
+}
+
+.hint-logo__name {
+	color: var(--hint-color-text);
+}
+
+.hint-logo__sep {
+	color: var(--hint-color-border);
+	font-weight: var(--hint-weight-regular);
+}
+
+.hint-logo__year {
+	color: var(--hint-color-accent);
+	font-weight: var(--hint-weight-semibold);
+}
+
+/* ——— Favicon mark helper (for inline SVG usage) ——— */
+.hint-mark {
+	font-family: var(--hint-font-heading);
+	font-weight: var(--hint-weight-bold);
+	letter-spacing: -0.04em;
+	color: var(--hint-color-text);
+}
+
+.hint-mark__dot {
+	color: var(--hint-color-accent);
+}

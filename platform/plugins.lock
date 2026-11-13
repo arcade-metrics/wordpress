@@ -1,0 +1,13 @@
+# Plugins e temas de terceiros da rede (spec 03). Mudança aqui = PR dedicado: afeta todos os sites.
+# Formato: tipo slug versão modo
+#   tipo: plugin | theme
+#   modo (plugin): network = ativo na rede toda | none = só instalado
+#   modo (theme):  network = habilitado na rede
+#
+# Fase 1 (paridade): réplica exata do plugins.txt da rede antiga (ciatec-wordpress-network, 01/10/2026).
+# Tirar o Elementor e os inativos fica para a fase de evolução, depois do go-live.
+plugin elementor       4.3.3  network
+plugin polylang        3.8.10 network
+plugin akismet         5.7.2  none
+plugin fluent-smtp     2.4.1  none
+theme  hello-elementor 3.5.1  network

@@ -1,0 +1,73 @@
+/*
+ * CIATec design tokens. Starting values from the one-page guide; replace the colors
+ * with the ones extracted from the logo once it is delivered.
+ * Contrast checked against WCAG AA (4.5:1 for text) for the pairs used below.
+ */
+:root {
+	/* Colors */
+	--ciatec-navy: #0b1f33;          /* hero, header, footer background */
+	--ciatec-primary: #0b6d76;       /* on light backgrounds (>= 5:1 on bg and bg-tint) */
+	--ciatec-primary-on-dark: #7dd3db; /* on navy */
+	--ciatec-accent: #f2a541;        /* sparingly, on navy */
+	color-scheme: light;
+	/* Warm off-white instead of cool gray: the page felt cold. */
+	--ciatec-bg: #faf8f4;
+	--ciatec-bg-tint: #f2ede4;
+	--ciatec-surface: #ffffff;
+	--ciatec-text: #1b2230;
+	--ciatec-text-muted: #4d5566;
+	--ciatec-heading: var(--ciatec-navy);
+	--ciatec-on-dark: #ffffff;
+	--ciatec-on-dark-muted: #cbd5e1;
+	--ciatec-border: #e2dccf;
+
+	/* Logo colors: decorative only (cyan/green are below 4.5:1 as text on white) */
+	--ciatec-brand-cyan: #01a0c0;
+	--ciatec-brand-green: #5c823d;
+	--ciatec-brand-pink: #e3569f;
+	--ciatec-brand-orange: #f89e26;
+
+	/* Typography */
+	--ciatec-font-heading: "Lexend", system-ui, sans-serif;
+	--ciatec-font-body: "Atkinson Hyperlegible", system-ui, sans-serif;
+	--ciatec-text-body: 1.125rem;    /* 18px */
+	--ciatec-leading-body: 1.6;
+	--ciatec-leading-heading: 1.2;
+	--ciatec-text-h1: clamp(2rem, 4.5vw + 1rem, 3.5rem);
+	--ciatec-text-h2: clamp(1.75rem, 2vw + 1rem, 2.5rem);
+	--ciatec-text-h3: 1.25rem;
+	--ciatec-measure: 70ch;
+
+	/* Spacing (8px scale) */
+	--ciatec-space-1: 0.5rem;
+	--ciatec-space-2: 1rem;
+	--ciatec-space-3: 1.5rem;
+	--ciatec-space-4: 2rem;
+	--ciatec-space-5: 3rem;
+	--ciatec-space-6: 4rem;
+	--ciatec-space-7: 6rem;
+
+	/* Geometry */
+	--ciatec-radius-sm: 4px;
+	--ciatec-radius-md: 8px;
+	--ciatec-container: 72rem;
+	--ciatec-header-h: 5rem;
+	--ciatec-tap: 2.75rem;           /* 44px minimum target */
+}
+
+/*
+ * Dark theme (header, hero and footer are already dark and do not change).
+ * Set by the script in <head> from the saved choice or prefers-color-scheme.
+ * Text pairs: --ciatec-text on --ciatec-bg ~15:1, muted ~8:1, primary ~9:1.
+ */
+:root[data-theme="dark"] {
+	color-scheme: dark;
+	--ciatec-bg: #0d1b2a;
+	--ciatec-bg-tint: #12273b;
+	--ciatec-surface: #14293e;
+	--ciatec-text: #e8eef4;
+	--ciatec-text-muted: #aebccb;
+	--ciatec-border: #2a435b;
+	--ciatec-primary: #7dd3db;
+	--ciatec-heading: var(--ciatec-text);
+}

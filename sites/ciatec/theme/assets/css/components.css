@@ -1,0 +1,67 @@
+.ciatec-container {
+	width: 100%;
+	max-width: var(--ciatec-container);
+	margin-inline: auto;
+	padding-inline: var(--ciatec-space-3);
+	box-sizing: border-box;
+}
+
+.ciatec-section { padding-block: var(--ciatec-space-7); }
+.ciatec-section--tint { background: var(--ciatec-bg-tint); }
+
+/*
+ * Asymmetric split: narrow title column, wide content column (editorial layout).
+ * With --sticky (long lists only) the title stays in view while its column scrolls (no animation).
+ */
+.ciatec-split {
+	display: grid;
+	grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+	gap: var(--ciatec-space-3) var(--ciatec-space-6);
+	align-items: start;
+}
+.ciatec-split + .ciatec-split { margin-top: var(--ciatec-space-6); }
+.ciatec-split__title { margin: 0; }
+.ciatec-split--sticky > .ciatec-split__title {
+	position: sticky;
+	top: calc(var(--ciatec-header-h) + var(--ciatec-space-3));
+}
+.ciatec-split__body { min-width: 0; }
+
+.ciatec-lead {
+	max-width: 62ch;
+	font-size: 1.3125rem;
+	line-height: 1.55;
+}
+.ciatec-label {
+	padding-top: 0.5rem;
+	color: var(--ciatec-text-muted);
+	font-family: var(--ciatec-font-body);
+	font-size: 1rem;
+	font-weight: 700;
+}
+.ciatec-statement {
+	max-width: 28ch;
+	margin: 0;
+	font-family: var(--ciatec-font-heading);
+	font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.375rem);
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+/* Dark band (contact). Slightly deeper than the page in the dark theme so it still reads as a band. */
+.ciatec-band {
+	background: var(--ciatec-band-bg, var(--ciatec-navy));
+	color: var(--ciatec-on-dark);
+}
+.ciatec-band .ciatec-lead { color: var(--ciatec-on-dark-muted); }
+:root[data-theme="dark"] .ciatec-band { --ciatec-band-bg: #07121e; }
+
+@media (max-width: 767px) {
+	.ciatec-split { grid-template-columns: 1fr; }
+	.ciatec-split--sticky > .ciatec-split__title { position: static; }
+	.ciatec-split + .ciatec-split { margin-top: var(--ciatec-space-5); }
+	.ciatec-lead { font-size: 1.1875rem; }
+}
+
+/* Inline SVG icons (ciatec_icon): default size; contexts override. */
+.ciatec-icon { flex: 0 0 auto; width: 1.5rem; height: 1.5rem; }

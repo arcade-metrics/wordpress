@@ -1,0 +1,98 @@
+/* Self-hosted fonts (OFL): Lexend (headings), Atkinson Hyperlegible (body). */
+@font-face {
+	font-family: "Atkinson Hyperlegible";
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+	src: url("../fonts/atkinson-hyperlegible-400.woff2") format("woff2");
+}
+@font-face {
+	font-family: "Atkinson Hyperlegible";
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+	src: url("../fonts/atkinson-hyperlegible-700.woff2") format("woff2");
+}
+@font-face {
+	font-family: "Lexend";
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+	src: url("../fonts/lexend-latin-600.woff2") format("woff2");
+}
+@font-face {
+	font-family: "Lexend";
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+	src: url("../fonts/lexend-latin-700.woff2") format("woff2");
+}
+
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: var(--ciatec-header-h);
+}
+
+body {
+	margin: 0;
+	transition: background-color 0.2s ease, color 0.2s ease;
+	background: var(--ciatec-bg);
+	color: var(--ciatec-text);
+	font-family: var(--ciatec-font-body);
+	font-size: var(--ciatec-text-body);
+	line-height: var(--ciatec-leading-body);
+}
+
+h1,
+h2,
+h3 {
+	margin: 0 0 var(--ciatec-space-2);
+	font-family: var(--ciatec-font-heading);
+	font-weight: 600;
+	line-height: var(--ciatec-leading-heading);
+	color: var(--ciatec-heading);
+}
+.ciatec-band :is(h1, h2, h3),
+.ciatec-hero :is(h1, h2, h3) { color: inherit; }
+h1 { font-size: var(--ciatec-text-h1); font-weight: 700; }
+h2 { font-size: var(--ciatec-text-h2); }
+h3 { font-size: var(--ciatec-text-h3); }
+p { margin: 0 0 var(--ciatec-space-2); }
+
+a { color: var(--ciatec-primary); text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible {
+	outline: 3px solid var(--ciatec-primary);
+	outline-offset: 3px;
+	border-radius: var(--ciatec-radius-sm);
+}
+
+img { max-width: 100%; height: auto; }
+
+.screen-reader-text:not(:focus) {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; }
+	*,
+	*::before,
+	*::after {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+/* Fixed header: push inner pages down (the home hero runs under it). */
+body:not(.home) { padding-top: var(--ciatec-header-h); }
+.admin-bar .ciatec-header { top: 32px; }
+@media (max-width: 782px) {
+	.admin-bar .ciatec-header { top: 46px; }
+}

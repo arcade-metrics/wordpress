@@ -1,0 +1,17 @@
+/*
+Theme Name: HINT
+Theme URI: https://hintconference.com
+Template: hello-elementor
+Author: HINT
+Description: Child theme of Hello Elementor with the HINT International Congress design system. Pages are built in Elementor; this theme only provides visual infrastructure.
+Version: 1.7.9
+Requires at least: 6.4
+Tested up to: 6.8
+Requires PHP: 7.4
+Text Domain: hint
+*/
+
+/**
+ * Theme stylesheet header only.
+ * Design tokens and visual rules live in assets/css/.
+ */

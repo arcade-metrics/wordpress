@@ -1,0 +1,51 @@
+# CI: roda em todo PR. Sobe a rede do zero, roda o setup duas vezes (idempotência) e o smoke test.
+name: CI
+
+on:
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell
+        run: |
+          shopt -s globstar
+          bash -n scripts/*.sh server/**/*.sh platform/**/*.sh
+          shellcheck -S warning scripts/*.sh server/**/*.sh platform/**/*.sh
+      - name: PHP
+        run: find platform sites -name '*.php' -print0 | xargs -0 -n1 php -l > /dev/null
+      - name: Compose
+        run: |
+          docker compose config -q
+          IMAGE_TAG=x DB_PASSWORD=x DB_ROOT_PASSWORD=x WORDPRESS_AUTH_KEY=x WORDPRESS_SECURE_AUTH_KEY=x \
+          WORDPRESS_LOGGED_IN_KEY=x WORDPRESS_NONCE_KEY=x WORDPRESS_AUTH_SALT=x WORDPRESS_SECURE_AUTH_SALT=x \
+          WORDPRESS_LOGGED_IN_SALT=x WORDPRESS_NONCE_SALT=x docker compose -f deploy/compose.yml config -q
+
+  e2e:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Subir a rede
+        run: docker compose up -d --build --wait
+      - name: Setup (1ª vez)
+        run: bash scripts/setup-local.sh
+      - name: Setup (2ª vez, idempotência)
+        run: bash scripts/setup-local.sh
+      - name: Smoke test
+        run: bash scripts/smoke-test.sh
+      - name: Memória dos containers
+        if: always()
+        run: docker stats --no-stream
+      - name: Logs
+        if: failure()
+        run: docker compose logs --tail=200

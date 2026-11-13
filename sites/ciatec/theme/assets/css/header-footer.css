@@ -1,0 +1,240 @@
+/* Header and footer: dark chrome, same in light and dark themes. Structure follows the HINT header. */
+
+:root {
+	/* Alpha >= 0.72 keeps white text >= 4.5:1 even over a white page (HINT's 0.48 does not). */
+	--ciatec-chrome-bg: rgba(11, 31, 51, 0.75);
+	--ciatec-chrome-bg-solid: rgba(11, 31, 51, 0.97);
+	--ciatec-chrome-border: rgba(255, 255, 255, 0.2);
+	--ciatec-flag-w: 1.75rem;
+}
+
+/* Header ---------------------------------------------------------------- */
+.ciatec-header {
+	position: fixed;
+	inset: 0 0 auto 0;
+	z-index: 100;
+	background: var(--ciatec-chrome-bg);
+	border-bottom: 1px solid var(--ciatec-chrome-border);
+	color: var(--ciatec-on-dark);
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+	.ciatec-header { background: var(--ciatec-chrome-bg-solid); }
+}
+@media (prefers-reduced-transparency: reduce) {
+	.ciatec-header { background: var(--ciatec-chrome-bg-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+.ciatec-header.is-open { background: var(--ciatec-chrome-bg-solid); }
+
+.ciatec-header__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--ciatec-space-4);
+	width: 100%;
+	max-width: var(--ciatec-container);
+	min-height: var(--ciatec-header-h);
+	margin-inline: auto;
+	padding-inline: var(--ciatec-space-3);
+	box-sizing: border-box;
+}
+.ciatec-logo {
+	display: inline-flex;
+	align-items: center;
+	flex: 0 0 auto;
+	min-height: var(--ciatec-tap);
+	color: var(--ciatec-on-dark);
+	font-family: var(--ciatec-font-heading);
+	font-weight: 700;
+	font-size: 1.25rem;
+	line-height: 0;
+	text-decoration: none;
+}
+.ciatec-logo img { display: block; width: auto; height: 3rem; }
+
+.ciatec-header__panel {
+	display: flex;
+	align-items: center;
+	gap: var(--ciatec-space-4);
+	margin-inline-start: auto;
+}
+.ciatec-header__utils {
+	display: flex;
+	align-items: center;
+	gap: var(--ciatec-space-1);
+}
+
+.ciatec-header a,
+.ciatec-footer a { color: var(--ciatec-on-dark); }
+.ciatec-header :focus-visible,
+.ciatec-footer :focus-visible { outline-color: var(--ciatec-primary-on-dark); }
+
+.ciatec-nav ul {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--ciatec-space-1) var(--ciatec-space-4);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.ciatec-nav a {
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--ciatec-tap);
+	border-bottom: 2px solid transparent;
+	font-weight: 700;
+	line-height: 1.2;
+	text-decoration: none;
+	transition: border-color 0.15s ease;
+}
+.ciatec-nav a:hover,
+.ciatec-nav a:focus-visible { border-bottom-color: var(--ciatec-accent); }
+.ciatec-nav .current-menu-item > a { border-bottom-color: var(--ciatec-on-dark); }
+
+/* Language flags -------------------------------------------------------- */
+.ciatec-lang { position: relative; display: inline-flex; }
+.ciatec-lang__trigger,
+.ciatec-lang__option,
+.ciatec-theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: var(--ciatec-tap);
+	min-height: var(--ciatec-tap);
+	padding: 0;
+	border: 0;
+	border-radius: var(--ciatec-radius-md);
+	background: transparent;
+	color: var(--ciatec-on-dark);
+	cursor: pointer;
+}
+.ciatec-lang__trigger:hover,
+.ciatec-lang__option:hover,
+.ciatec-theme-toggle:hover { background: rgba(255, 255, 255, 0.12); }
+.ciatec-lang__flag {
+	display: block;
+	flex: 0 0 auto;
+	width: var(--ciatec-flag-w);
+	height: calc(var(--ciatec-flag-w) * 0.6);
+	object-fit: cover;
+	border: 1px solid var(--ciatec-chrome-border);
+	border-radius: 2px;
+}
+.ciatec-lang__code { font-weight: 700; }
+.ciatec-lang__menu {
+	position: absolute;
+	top: calc(100% + var(--ciatec-space-1));
+	right: 0;
+	z-index: 10;
+	display: flex;
+	flex-direction: column;
+	width: max-content;
+	margin: 0;
+	padding: 0.25rem;
+	border: 1px solid var(--ciatec-chrome-border);
+	border-radius: var(--ciatec-radius-md);
+	background: var(--ciatec-chrome-bg-solid);
+	list-style: none;
+}
+.ciatec-lang__menu[hidden] { display: none; }
+.ciatec-lang--inline ul { display: flex; gap: 0; margin: 0; padding: 0; list-style: none; }
+.ciatec-lang--inline [aria-current] { background: rgba(255, 255, 255, 0.16); }
+
+/* Light/dark switch: moon while light (go dark), sun while dark (go light). */
+.ciatec-theme-toggle .ciatec-icon { width: 1.25rem; height: 1.25rem; }
+.ciatec-theme-toggle__sun { display: none; }
+:root[data-theme="dark"] .ciatec-theme-toggle__sun { display: inline-flex; }
+:root[data-theme="dark"] .ciatec-theme-toggle__moon { display: none; }
+
+/* The parent theme paints focused/hovered buttons pink: keep ours on the chrome palette. */
+.ciatec-header button:focus,
+.ciatec-header button:active { color: var(--ciatec-on-dark); background-color: rgba(255, 255, 255, 0.12); }
+.ciatec-header button:hover { color: var(--ciatec-on-dark); }
+
+/* Mobile menu toggle (shown by header.js; without JS the menu just stays visible). */
+.ciatec-header__toggle {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	width: var(--ciatec-tap);
+	height: var(--ciatec-tap);
+	padding: 0;
+	border: 1px solid var(--ciatec-chrome-border);
+	border-radius: var(--ciatec-radius-md);
+	background: transparent;
+	color: var(--ciatec-on-dark);
+	cursor: pointer;
+}
+.ciatec-header__toggle-bars,
+.ciatec-header__toggle-bars::before,
+.ciatec-header__toggle-bars::after {
+	display: block;
+	width: 1.25rem;
+	height: 2px;
+	background: currentColor;
+	content: "";
+}
+.ciatec-header__toggle-bars { position: relative; }
+.ciatec-header__toggle-bars::before { position: absolute; top: -6px; }
+.ciatec-header__toggle-bars::after { position: absolute; top: 6px; }
+
+@media (max-width: 900px) {
+	.ciatec-header__inner { flex-wrap: wrap; align-content: flex-start; row-gap: 0; }
+	.ciatec-logo { min-height: var(--ciatec-header-h); }
+	.ciatec-header__toggle:not([hidden]) { display: inline-flex; }
+	.ciatec-logo img { height: 2.5rem; }
+	.ciatec-header__panel {
+		flex-basis: 100%;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--ciatec-space-2);
+		max-height: calc(100vh - var(--ciatec-header-h));
+		overflow-y: auto;
+		padding-bottom: var(--ciatec-space-3);
+		margin-inline-start: 0;
+	}
+	.ciatec-header__panel[hidden] { display: none; }
+	.ciatec-nav ul { flex-direction: column; align-items: flex-start; gap: 0; }
+	.ciatec-lang__menu { right: auto; left: 0; }
+}
+
+/* Footer ---------------------------------------------------------------- */
+.ciatec-footer {
+	padding: var(--ciatec-space-5) 0 var(--ciatec-space-3);
+	border-top: 1px solid var(--ciatec-chrome-border);
+	background: var(--ciatec-navy);
+	color: var(--ciatec-on-dark-muted);
+}
+.ciatec-footer__inner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--ciatec-space-4);
+	max-width: var(--ciatec-container);
+	margin-inline: auto;
+	padding-inline: var(--ciatec-space-3); /* same gutter as .ciatec-container */
+	box-sizing: border-box;
+}
+.ciatec-footer p { margin: 0 0 var(--ciatec-space-1); }
+.ciatec-footer__logo { display: block; width: auto; max-width: 100%; height: 3rem; margin-bottom: var(--ciatec-space-2); } /* 60% smaller than the original 7.5rem */
+.ciatec-footer__name {
+	color: var(--ciatec-on-dark);
+	font-family: var(--ciatec-font-heading);
+	font-weight: 600;
+}
+.ciatec-copyright {
+	width: calc(100% - 2 * var(--ciatec-space-3));
+	max-width: calc(var(--ciatec-container) - 2 * var(--ciatec-space-3));
+	margin: var(--ciatec-space-4) auto 0 !important;
+	padding-top: var(--ciatec-space-2);
+	border-top: 1px solid var(--ciatec-chrome-border);
+	box-sizing: border-box;
+	font-size: 0.875rem;
+}
+
+@media (max-width: 767px) {
+	.ciatec-footer__inner { flex-direction: column; }
+}

@@ -1,0 +1,395 @@
+/**
+ * HINT Header
+ * Height ~80px, flat, dark translucent chrome, blue used only as accent.
+ */
+
+:root {
+	--hint-header-height: 80px;
+	--hint-header-max-width: 1140px;
+	/* Shared dark chrome (header + footer). */
+	--hint-chrome-bg: rgba(17, 17, 17, 0.68);
+	--hint-header-bg: rgba(17, 17, 17, 0.48);
+	--hint-chrome-fg: #ffffff;
+	--hint-chrome-fg-muted: rgba(255, 255, 255, 0.78);
+	--hint-chrome-border: rgba(255, 255, 255, 0.2);
+	--hint-chrome-panel: rgba(17, 17, 17, 0.88);
+	--hint-chrome-accent: var(--hint-color-accent);
+	--hint-chrome-accent-hover: var(--hint-color-accent-hover);
+	/* Flag artwork is 100x60, so keep the 5:3 ratio. */
+	--hint-flag-width: 25px;
+	--hint-flag-height: 15px;
+}
+
+.hint-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	z-index: 100;
+	color: var(--hint-chrome-fg);
+	background-color: var(--hint-header-bg);
+	border-bottom: var(--hint-border-width) solid var(--hint-chrome-border);
+	box-shadow: none;
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+}
+
+/* Offset main content under the fixed bar (hero is full-bleed and skips this). */
+body.hint-fixed-header:not(.hint-front) {
+	padding-top: var(--hint-header-height);
+}
+
+.hint-header__inner {
+	max-width: var(--hint-header-max-width);
+	min-height: var(--hint-header-height);
+	margin-inline: auto;
+	padding-inline: var(--hint-space-3);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--hint-space-4);
+}
+
+/* ——— Logo ——— */
+.hint-header__logo {
+	display: inline-flex;
+	align-items: center;
+	flex: 0 0 auto;
+	text-decoration: none;
+	line-height: 0;
+}
+
+.hint-header__logo img {
+	display: block;
+	width: auto;
+	height: 26px;
+}
+
+/* ——— Navigation ——— */
+.hint-nav__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	gap: var(--hint-space-4);
+}
+
+.hint-nav__list a {
+	font-family: var(--hint-font-body);
+	font-size: 16px;
+	font-weight: var(--hint-weight-medium);
+	line-height: 1.2;
+	color: var(--hint-chrome-fg);
+	text-decoration: none;
+	padding-block: var(--hint-space-1);
+	border-bottom: var(--hint-border-width) solid transparent;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.hint-nav__list a:hover,
+.hint-nav__list a:focus-visible {
+	color: var(--hint-chrome-fg);
+	border-bottom-color: var(--hint-chrome-accent-hover);
+}
+
+.hint-nav__list .current-menu-item > a,
+.hint-nav__list .current_page_item > a {
+	border-bottom-color: var(--hint-chrome-fg);
+}
+
+.hint-header__nav {
+	margin-inline-start: auto;
+}
+
+/* ——— Actions ——— */
+.hint-header__actions {
+	display: flex;
+	align-items: center;
+	gap: var(--hint-space-2);
+	flex: 0 0 auto;
+}
+
+.hint-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	font-family: var(--hint-font-body);
+	font-size: 14px;
+	font-weight: var(--hint-weight-semibold);
+	line-height: 1;
+	text-decoration: none;
+	padding: 0 var(--hint-space-2);
+	border: var(--hint-border-width) solid transparent;
+	border-radius: var(--hint-radius);
+	box-shadow: none;
+	cursor: pointer;
+	transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+/* Match theme-toggle icon button height (36px). */
+.hint-header .hint-button--primary {
+	height: 36px;
+	background-color: var(--hint-chrome-accent);
+	border-color: var(--hint-chrome-accent);
+	color: var(--hint-color-on-accent);
+}
+
+.hint-header .hint-button--primary:hover,
+.hint-header .hint-button--primary:focus-visible {
+	background-color: var(--hint-chrome-accent-hover);
+	border-color: var(--hint-chrome-accent-hover);
+	color: #ffffff;
+}
+
+/* Submit a Paper: outlined next to the filled Register button. */
+.hint-header a.hint-button--outline {
+	height: 36px;
+	background-color: transparent;
+	border-color: var(--hint-chrome-fg-muted);
+	color: var(--hint-chrome-fg);
+}
+
+.hint-header a.hint-button--outline:hover,
+.hint-header a.hint-button--outline:focus-visible {
+	border-color: var(--hint-chrome-accent-hover);
+	color: var(--hint-chrome-accent-hover);
+}
+
+/* ——— Language switcher (inert until a translation plugin is added) ——— */
+.hint-lang {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+}
+
+/* Fixed box instead of height:auto, so the flag keeps its size no matter which
+ * flex context it sits in — the dropdown otherwise collapses it. */
+.hint-lang__flag {
+	display: block;
+	flex: 0 0 auto;
+	width: var(--hint-flag-width);
+	height: var(--hint-flag-height);
+	min-width: var(--hint-flag-width);
+	object-fit: cover;
+	border: var(--hint-border-width) solid var(--hint-chrome-border);
+	border-radius: 2px;
+}
+
+.hint-lang__menu {
+	position: absolute;
+	top: calc(100% + var(--hint-space-1));
+	right: 0;
+	z-index: 10;
+	width: max-content;
+	margin: 0;
+	padding: var(--hint-space-1);
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: var(--hint-space-1);
+	background-color: var(--hint-chrome-panel);
+	border: var(--hint-border-width) solid var(--hint-chrome-border);
+	border-radius: var(--hint-radius);
+	box-shadow: none;
+}
+
+.hint-lang__menu li {
+	display: flex;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.hint-lang__menu[hidden] {
+	display: none;
+}
+
+/* ——— Icon buttons ———
+ * Scoped under .hint-header so they outweigh the Elementor kit rule
+ * `.elementor-kit-N button`, which would otherwise paint them accent blue.
+ */
+.hint-header .hint-theme-toggle,
+.hint-header .hint-header__toggle,
+.hint-header .hint-lang__trigger,
+.hint-header .hint-lang__option {
+	appearance: none;
+	background: transparent;
+	background-image: none;
+	padding: 0;
+	border: var(--hint-border-width) solid var(--hint-chrome-border);
+	border-radius: var(--hint-radius);
+	color: var(--hint-chrome-fg);
+	box-shadow: none;
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+}
+
+.hint-header .hint-theme-toggle:hover,
+.hint-header .hint-theme-toggle:focus-visible,
+.hint-header .hint-header__toggle:hover,
+.hint-header .hint-header__toggle:focus-visible {
+	background: transparent;
+	border-color: var(--hint-chrome-accent-hover);
+	color: var(--hint-chrome-fg);
+}
+
+/* The flag itself carries the outline, so the buttons around it stay bare. */
+.hint-header .hint-lang__trigger,
+.hint-header .hint-lang__option {
+	display: inline-flex;
+	border: 0;
+	border-radius: 0;
+	line-height: 0;
+	text-decoration: none;
+	color: inherit;
+}
+
+.hint-header .hint-lang__trigger:hover .hint-lang__flag,
+.hint-header .hint-lang__trigger:focus-visible .hint-lang__flag,
+.hint-header .hint-lang__option:hover .hint-lang__flag,
+.hint-header .hint-lang__option:focus-visible .hint-lang__flag {
+	border-color: var(--hint-chrome-accent-hover);
+}
+
+/* ——— Theme toggle placeholder ——— */
+.hint-header .hint-theme-toggle {
+	display: inline-flex;
+	width: 36px;
+	height: 36px;
+}
+
+.hint-theme-toggle__icon {
+	display: block;
+}
+
+/* ——— Mobile toggle ——— */
+.hint-header .hint-header__toggle {
+	display: none;
+	width: 44px;
+	height: 44px;
+}
+
+.hint-header__toggle-bars,
+.hint-header__toggle-bars::before,
+.hint-header__toggle-bars::after {
+	display: block;
+	width: 18px;
+	height: 1px;
+	background-color: var(--hint-chrome-fg);
+	transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.hint-header__toggle-bars {
+	position: relative;
+}
+
+.hint-header__toggle-bars::before,
+.hint-header__toggle-bars::after {
+	content: "";
+	position: absolute;
+	left: 0;
+}
+
+.hint-header__toggle-bars::before {
+	transform: translateY(-6px);
+}
+
+.hint-header__toggle-bars::after {
+	transform: translateY(6px);
+}
+
+.hint-header__toggle[aria-expanded="true"] .hint-header__toggle-bars {
+	background-color: transparent;
+}
+
+.hint-header__toggle[aria-expanded="true"] .hint-header__toggle-bars::before {
+	transform: rotate(45deg);
+}
+
+.hint-header__toggle[aria-expanded="true"] .hint-header__toggle-bars::after {
+	transform: rotate(-45deg);
+}
+
+/* ——— Mobile panel ——— */
+.hint-header__mobile {
+	display: none;
+	padding: var(--hint-space-3);
+	border-top: var(--hint-border-width) solid var(--hint-chrome-border);
+	background-color: var(--hint-chrome-panel);
+}
+
+.hint-nav--mobile .hint-nav__list {
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0;
+}
+
+.hint-nav--mobile .hint-nav__list a {
+	display: block;
+	padding-block: var(--hint-space-2);
+	border-bottom: var(--hint-border-width) solid var(--hint-chrome-border);
+}
+
+.hint-nav--mobile .hint-nav__list li:last-child a {
+	border-bottom: 0;
+}
+
+.hint-header__mobile-ctas {
+	display: flex;
+	flex-direction: column;
+	gap: var(--hint-space-2);
+	margin-top: var(--hint-space-3);
+}
+
+.hint-header__mobile .hint-button {
+	width: 100%;
+	height: 44px;
+}
+
+.hint-header__mobile-utils {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--hint-space-2);
+	margin-top: var(--hint-space-3);
+}
+
+/* ——— Responsive ——— */
+/* Five nav items plus two CTAs: tighten before the mobile breakpoint. */
+@media (max-width: 1140px) {
+	.hint-header__inner,
+	.hint-nav__list {
+		gap: var(--hint-space-3);
+	}
+
+	.hint-nav__list a {
+		font-size: 15px;
+	}
+}
+
+@media (max-width: 900px) {
+	.hint-header__nav,
+	.hint-header__actions .hint-lang,
+	.hint-header__actions .hint-theme-toggle,
+	.hint-header__actions .hint-header__cta {
+		display: none;
+	}
+
+	.hint-header .hint-header__toggle {
+		display: inline-flex;
+	}
+
+	.hint-header__mobile:not([hidden]) {
+		display: block;
+	}
+}
+
+/* HINT header owns language UI — hide TranslatePress floaters. */
+.trp-floating-switcher,
+#trp-floater-ls {
+	display: none !important;
+}

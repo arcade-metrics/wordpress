@@ -1,0 +1,202 @@
+/* One-page home. */
+
+/*
+ * Hero: full width, full-bleed under the fixed translucent header. The video is already cropped
+ * to 20:9 (10% off top and bottom of the 16:9 original), so the height follows the width (45vw),
+ * never below 34rem (text needs room) and never above one screen.
+ */
+.ciatec-hero {
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	align-items: center;
+	min-height: min(max(45vw, 34rem), 100svh);
+	padding-block: calc(var(--ciatec-header-h) + var(--ciatec-space-4)) var(--ciatec-space-6);
+	overflow: hidden;
+	background-color: var(--ciatec-navy);
+	color: var(--ciatec-on-dark);
+}
+.ciatec-hero__video {
+	position: absolute;
+	inset: 0;
+	z-index: -2;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	pointer-events: none;
+}
+/* Dark gradient left to right: keeps the text at >= 4.5:1 over any frame of the video. */
+.ciatec-hero__overlay {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: linear-gradient(90deg, rgba(11, 31, 51, 0.96) 0%, rgba(11, 31, 51, 0.8) 45%, rgba(11, 31, 51, 0.35) 100%);
+}
+.ciatec-hero__inner { position: relative; }
+.ciatec-hero__content { max-width: 38rem; }
+.ciatec-hero__lead {
+	margin: 0;
+	color: var(--ciatec-on-dark-muted);
+	font-size: 1.25rem;
+}
+
+/* Pause/play (WCAG 2.2.2): bottom right, always reachable by keyboard. */
+.ciatec-hero__control {
+	position: absolute;
+	right: var(--ciatec-space-3);
+	bottom: var(--ciatec-space-3);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--ciatec-tap);
+	height: var(--ciatec-tap);
+	padding: 0;
+	border: 1px solid var(--ciatec-chrome-border);
+	border-radius: var(--ciatec-radius-md);
+	background: rgba(11, 31, 51, 0.75);
+	color: var(--ciatec-on-dark);
+	cursor: pointer;
+}
+.ciatec-hero__control:hover,
+.ciatec-hero__control:focus,
+.ciatec-hero__control:active { background-color: var(--ciatec-navy); color: var(--ciatec-on-dark); }
+.ciatec-hero__control[hidden] { display: none; }
+.ciatec-hero__control-play { display: inline-flex; }
+.ciatec-hero__control-pause { display: none; }
+.ciatec-hero__control.is-playing .ciatec-hero__control-play { display: none; }
+.ciatec-hero__control.is-playing .ciatec-hero__control-pause { display: inline-flex; }
+
+/* Quem Somos: pillars as three ruled columns, no icons. */
+.ciatec-pillars {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: var(--ciatec-space-5);
+	margin: var(--ciatec-space-7) 0 0;
+	padding: 0;
+	list-style: none;
+}
+.ciatec-pillars li {
+	padding-top: var(--ciatec-space-3);
+	border-top: 3px solid var(--ciatec-brand-cyan);
+}
+/* One logo color per pillar, in the order of the rings. */
+.ciatec-pillars li:nth-child(2) { border-top-color: var(--ciatec-brand-green); }
+.ciatec-pillars li:nth-child(3) { border-top-color: var(--ciatec-brand-pink); }
+
+/* Projetos: ruled list. */
+.ciatec-projects {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border-bottom: 1px solid var(--ciatec-border);
+}
+.ciatec-projects li {
+	padding-block: var(--ciatec-space-4);
+	border-top: 1px solid var(--ciatec-border);
+}
+.ciatec-projects li:first-child { padding-top: 0; border-top: 0; }
+.ciatec-projects h3 { margin-bottom: var(--ciatec-space-1); font-size: 1.375rem; }
+.ciatec-projects p { max-width: 62ch; margin: 0; }
+
+/* Contato: discreet e-mail link under the sentence. */
+.ciatec-email {
+	color: var(--ciatec-on-dark);
+	font-size: 1.125rem;
+	overflow-wrap: anywhere;
+	text-decoration: underline;
+	text-decoration-color: var(--ciatec-on-dark-muted);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.2em;
+}
+.ciatec-band a.ciatec-email:hover { color: var(--ciatec-on-dark); text-decoration-color: var(--ciatec-accent); text-decoration-thickness: 2px; }
+.ciatec-band :focus-visible { outline-color: var(--ciatec-primary-on-dark); }
+
+/* HINT 2027 banner: same tint as Projetos, so it reads as part of that band, just before Contato. */
+.ciatec-event {
+	padding-block: 0 var(--ciatec-space-7);
+	background: var(--ciatec-bg-tint);
+}
+.ciatec-event__link {
+	display: block;
+	overflow: hidden;
+	border-radius: 16px;
+	outline-offset: 4px;
+}
+.ciatec-event__link img {
+	display: block;
+	width: 100%;
+	height: auto;
+	transition: opacity 0.15s ease;
+}
+.ciatec-event__link:hover img { opacity: 0.9; }
+.ciatec-event__link:focus-visible { outline: 3px solid var(--ciatec-primary); }
+
+/* Social profiles under the e-mail: plain icons, no frame. Placeholders (no URL yet) get the same hover. */
+.ciatec-social {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--ciatec-space-1);
+	margin: var(--ciatec-space-3) 0 0 calc(-1 * 0.625rem); /* optical alignment with the text above */
+	padding: 0;
+	list-style: none;
+}
+.ciatec-social a,
+.ciatec-social [aria-disabled] {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 3rem;
+	height: 3rem;
+	border-radius: var(--ciatec-radius-md);
+	color: var(--ciatec-on-dark-muted);
+	transition: color 0.15s ease, background-color 0.15s ease;
+}
+.ciatec-social a:hover,
+.ciatec-social [aria-disabled]:hover {
+	background-color: rgba(255, 255, 255, 0.08);
+	color: var(--ciatec-accent);
+}
+.ciatec-social .ciatec-icon { width: 1.75rem; height: 1.75rem; }
+
+/* Logo ring as a large faint decoration, cropped by the section edge (about: left, contact: right). */
+.ciatec-has-ring,
+.ciatec-band { position: relative; isolation: isolate; overflow: hidden; }
+.ciatec-ring {
+	position: absolute;
+	top: 50%;
+	z-index: -1;
+	width: min(44vw, 34rem);
+	max-width: none;
+	height: auto;
+	opacity: 0.16;
+	transform: translateY(-50%);
+	pointer-events: none;
+}
+.ciatec-ring--right { right: -10rem; }
+
+/*
+ * Quem Somos' ring is sized to the section's own (taller, text-driven) height so it bleeds
+ * past the top and bottom edges too, not just the left one. Tuned per breakpoint against the
+ * section's measured height at that width (~1000px >=1024, ~1370px 768-1023, ~1420px <768).
+ */
+.ciatec-ring--left { left: -22rem; width: 56rem; opacity: 0.1; }
+:root[data-theme="dark"] .ciatec-ring--left { opacity: 0.12; }
+@media (min-width: 1024px) {
+	.ciatec-ring--left { width: 76rem; left: -46rem; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+	/* A ring this much wider than the (narrower) viewport reads as flat stripes, not a ring: stay modest here. */
+	.ciatec-ring--left { width: 62rem; left: -40rem; }
+}
+
+@media (max-width: 1023px) {
+	.ciatec-pillars { grid-template-columns: 1fr; gap: var(--ciatec-space-4); }
+}
+@media (max-width: 767px) {
+	.ciatec-section { padding-block: var(--ciatec-space-6); }
+	.ciatec-event { padding-block: 0 var(--ciatec-space-6); }
+	.ciatec-pillars { margin-top: var(--ciatec-space-6); }
+	.ciatec-ring { width: 20rem; opacity: 0.08; }
+	.ciatec-ring--right { right: -8rem; }
+	.ciatec-ring--left { width: 30rem; left: -13rem; }
+}

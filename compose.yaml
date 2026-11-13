@@ -1,0 +1,65 @@
+# Ambiente local (dev). Produção: deploy/compose.yml.
+#   docker compose up -d --build && bash scripts/setup-local.sh
+#   http://ciatec.localhost   http://hint.ciatec.localhost
+# Não use `docker compose down -v` sem querer apagar o banco local.
+
+name: wordpress-dev
+
+services:
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    command:
+      - --innodb-buffer-pool-size=64M
+      - --performance-schema=OFF
+      - --max-connections=30
+      - --skip-name-resolve
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:-wordpress}
+      MARIADB_USER: ${DB_USER:-wordpress}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-wordpress_dev}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_dev}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  wordpress:
+    build:
+      context: .
+      dockerfile: platform/Dockerfile
+    image: wordpress-local
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${WORDPRESS_PORT:-80}:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
+      WORDPRESS_DB_USER: ${DB_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-wordpress_dev}
+      WORDPRESS_DEBUG: "1"
+      WP_DOMAIN_CURRENT_SITE: ${WP_DOMAIN_CURRENT_SITE:-ciatec.localhost}
+      WP_ENVIRONMENT_TYPE: local
+      PHP_INI_SCAN_DIR: ":/usr/local/etc/php/dev.d"
+    volumes:
+      - uploads:/var/www/wordpress/wp-content/uploads
+      # Edição ao vivo: código próprio por cima da imagem
+      - ./sites/ciatec/theme:/var/www/wordpress/wp-content/themes/ciatec
+      - ./sites/hint/theme:/var/www/wordpress/wp-content/themes/hint
+      - ./sites/ciatec/seed.php:/opt/sites/ciatec/seed.php:ro
+      - ./sites/hint/seed.php:/opt/sites/hint/seed.php:ro
+      - ./platform/mu-plugins:/var/www/wordpress/wp-content/mu-plugins:ro
+      - ./platform/config/network.php:/etc/wordpress/network.php:ro
+      - ./platform/sites.conf:/opt/platform/sites.conf:ro
+      - ./platform/bin/network-setup.sh:/usr/local/bin/network-setup:ro
+      - ./platform/config/php-dev.ini:/usr/local/etc/php/dev.d/zz-dev.ini:ro
+
+volumes:
+  db_data:
+  uploads:

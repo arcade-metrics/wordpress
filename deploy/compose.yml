@@ -1,0 +1,68 @@
+# Produção (EC2 ciatec-games, /opt/wordpress). Vem dentro da imagem e é extraído pelo server/deploy.sh.
+# Variáveis: /opt/wordpress/.env (segredos, gerado do SSM) e /opt/wordpress/.env.deploy (IMAGE_TAG).
+# Nunca use `docker compose down -v` aqui: apaga banco e uploads.
+# Orçamento de memória: spec 01.
+
+name: wordpress
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    mem_limit: 256m
+    logging: *logging
+    command:
+      - --innodb-buffer-pool-size=64M
+      - --performance-schema=OFF
+      - --max-connections=30
+      - --skip-name-resolve
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:-wordpress}
+      MARIADB_USER: ${DB_USER:-wordpress}
+      MARIADB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?DB_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  wordpress:
+    image: ${IMAGE:-ghcr.io/arcade-metrics/wordpress}:${IMAGE_TAG:?IMAGE_TAG}
+    restart: unless-stopped
+    mem_limit: 384m
+    logging: *logging
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8082:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
+      WORDPRESS_DB_USER: ${DB_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD}
+      WORDPRESS_AUTH_KEY: ${WORDPRESS_AUTH_KEY:?salts}
+      WORDPRESS_SECURE_AUTH_KEY: ${WORDPRESS_SECURE_AUTH_KEY:?salts}
+      WORDPRESS_LOGGED_IN_KEY: ${WORDPRESS_LOGGED_IN_KEY:?salts}
+      WORDPRESS_NONCE_KEY: ${WORDPRESS_NONCE_KEY:?salts}
+      WORDPRESS_AUTH_SALT: ${WORDPRESS_AUTH_SALT:?salts}
+      WORDPRESS_SECURE_AUTH_SALT: ${WORDPRESS_SECURE_AUTH_SALT:?salts}
+      WORDPRESS_LOGGED_IN_SALT: ${WORDPRESS_LOGGED_IN_SALT:?salts}
+      WORDPRESS_NONCE_SALT: ${WORDPRESS_NONCE_SALT:?salts}
+      WP_DOMAIN_CURRENT_SITE: ciatec.org
+      WP_ENVIRONMENT_TYPE: production
+    volumes:
+      - uploads:/var/www/wordpress/wp-content/uploads
+
+volumes:
+  db_data:
+  uploads:

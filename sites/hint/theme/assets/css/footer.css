@@ -1,0 +1,138 @@
+/**
+ * HINT Footer
+ * Solid dark band in normal flow (the front page has content sections below the hero).
+ *
+ * Link colors (email, social, admin) come from Elementor Site Settings
+ * (Theme Style → Links: #03e8fc / hover #f5119e). Do not override `color` here.
+ */
+
+:root {
+	--hint-footer-max-width: 1140px;
+	--hint-footer-height: 72px;
+}
+
+.hint-footer {
+	color: var(--hint-chrome-fg, #ffffff);
+	background-color: var(--hint-color-accent-dark);
+	border-top: var(--hint-border-width) solid var(--hint-chrome-border, rgba(255, 255, 255, 0.2));
+	box-shadow: none;
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+}
+
+.hint-footer__inner {
+	max-width: var(--hint-footer-max-width);
+	min-height: var(--hint-footer-height);
+	margin-inline: auto;
+	padding-block: var(--hint-space-3);
+	padding-inline: var(--hint-space-3);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--hint-space-3);
+	box-sizing: border-box;
+}
+
+.hint-footer__email {
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-small);
+	font-weight: var(--hint-weight-medium);
+	line-height: 1.4;
+	text-decoration: none;
+	border-bottom: var(--hint-border-width) solid transparent;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.hint-footer__email:hover,
+.hint-footer__email:focus-visible {
+	border-bottom-color: currentColor;
+}
+
+.hint-footer__event {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-small);
+	line-height: 1.4;
+	color: var(--hint-chrome-fg-muted, rgba(255, 255, 255, 0.78));
+}
+
+.hint-footer__event-name {
+	font-family: var(--hint-font-heading);
+	font-size: 16px;
+	font-weight: var(--hint-weight-bold);
+	color: var(--hint-chrome-fg, #ffffff);
+}
+
+.hint-footer__copy {
+	margin: var(--hint-space-1) 0 0;
+	font-size: 12px;
+	font-weight: var(--hint-weight-medium);
+}
+
+.hint-footer__end {
+	display: flex;
+	align-items: center;
+	gap: var(--hint-space-2);
+}
+
+.hint-footer__social {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	gap: var(--hint-space-2);
+}
+
+.hint-footer__social-link,
+.hint-footer__admin {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	border-radius: var(--hint-radius-sm);
+	transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+.hint-footer__social-link {
+	width: 36px;
+	height: 36px;
+}
+
+/* Discreet size only — color from Elementor links. */
+.hint-footer__admin {
+	width: 28px;
+	height: 28px;
+	margin-inline-start: var(--hint-space-1);
+	opacity: 0.55;
+}
+
+.hint-footer__admin:hover,
+.hint-footer__admin:focus-visible {
+	opacity: 1;
+}
+
+.hint-footer__social-icon,
+.hint-footer__admin-icon {
+	display: block;
+}
+
+@media (max-width: 767px) {
+	.hint-footer__inner {
+		flex-direction: column;
+		text-align: center;
+		padding-block: var(--hint-space-3);
+		gap: var(--hint-space-2);
+	}
+
+	.hint-footer__event {
+		order: 3;
+	}
+
+	.hint-footer__end {
+		order: 2;
+		justify-content: center;
+	}
+}
