@@ -39,11 +39,19 @@ Se um dia quiser automático: ADR 0005, passo "OIDC + papel IAM".
    ```
    O script faz: lock → extrai o bundle → escreve `.env.deploy` → `compose up -d` (projeto `wordpress`, mesmos volumes
    `wordpress_db_data`/`wordpress_uploads`: banco e uploads são preservados) → `wp core update-db` → `network-setup` →
-   smoke test em `127.0.0.1:8082`. Falhou o smoke test → volta para a tag anterior (se houver `.env.deploy` antigo).
+   smoke test em `127.0.0.1:8082` → confere que o cabeçalho `X-Release` é a tag pedida → limpa o cache do Nginx
+   (`/var/cache/nginx/wordpress`, só da rede). Falhou o smoke test ou a tag → volta para a tag anterior.
    Tempo: ~2–4 min. `executionTimeout` do SSM: 900.
 
-4. **Verificar de fora:** `curl -sI https://ciatec.org/ https://ciatec.org/en/ https://hint.ciatec.org/ https://hint.ciatec.org/pt/`
-   → 200 e, no HINT, o HTML tem a landing nova (procure `hint-2027`). `cat /opt/wordpress/deploy.log`.
+4. **Verificar de fora.** Cada página diz a versão no cabeçalho `X-Release` (imagens a partir do PR #5):
+   ```bash
+   for u in https://ciatec.org/ https://ciatec.org/en/ https://ciatec.org/es/ https://hint.ciatec.org/ https://hint.ciatec.org/pt/; do
+     echo "$u $(curl -s -o /dev/null -w '%{http_code}' "$u") $(curl -sI "$u" | grep -i '^x-release' | tr -d '\r')"
+   done
+   ```
+   Esperado: 200 e `X-Release: <tag>` em todas. Como o `deploy.sh` limpa o cache, não há janela com a versão antiga;
+   se aparecer a tag anterior com `X-Cache: HIT`, o passo de limpeza falhou (veja `deploy.log`).
+   Imagens até `sha-1134f59` não têm `X-Release`: para elas, compare o HTML e lembre do cache de 5 min.
 
 5. **Jogos intactos:** repita o passo 1 e compare; `*.game.ciatec.org` respondendo.
 
@@ -51,9 +59,11 @@ Se um dia quiser automático: ADR 0005, passo "OIDC + papel IAM".
 
 ## Reverter
 
-`bash /opt/wordpress/bundle/server/deploy.sh <tag-anterior>` (o `deploy.log` lista as tags). Primeira reversão possível:
-`sha-1134f59`. Antes disso só existe a imagem local `wordpress-local:sha-9d32e50` do go-live, que sobe com
-`docker compose -f /opt/wordpress/src/deploy/compose.yml ...` — ver `logs/changes.md` de 2026-11-13.
+`bash /opt/wordpress/bundle/server/deploy.sh <tag-anterior>` (o `deploy.log` lista as tags). A versão mais antiga
+restaurável por aqui é `sha-1134f59` (primeiro deploy por este runbook, 2026-11-25). O go-live de 13/11
+(`wordpress-local:sha-9d32e50`, construída no servidor) **não** passa pelo `deploy.sh`: só como emergência, subindo
+com o compose de `/opt/wordpress/src` — ver `logs/changes.md` de 2026-11-13. Prefira não voltar a ela: não tem a
+correção do 404 em `/en/` nem a landing do HINT.
 
 ## Notas
 

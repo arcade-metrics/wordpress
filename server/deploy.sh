@@ -51,5 +51,18 @@ wpx network-setup
 
 DOMAIN=ciatec.org ORIGIN=http://127.0.0.1:8082 SCHEME=https bash "${BUNDLE}/scripts/smoke-test.sh"
 
+# O container serve a tag certa? Imagens até sha-1134f59 não têm X-Release: aí só avisa (reverter continua possível).
+release="$(curl -sI --max-time 30 -H 'Host: ciatec.org' -H 'X-Forwarded-Proto: https' http://127.0.0.1:8082/ \
+            | tr -d '\r' | sed -n 's/^[Xx]-[Rr]elease: //p')"
+if [[ -z "${release}" ]]; then
+  log "aviso: imagem sem X-Release"
+elif [[ "${release}" != "${TAG}" ]]; then
+  log "X-Release ${release} != ${TAG}"; false
+fi
+
 trap - ERR
+
+# Cache do Nginx (só a pasta da rede; os jogos não usam): sem isto, visitantes veem a versão anterior por até 5 min.
+CACHE=/var/cache/nginx/wordpress
+[[ -d "${CACHE}" ]] && find "${CACHE}" -mindepth 1 -delete && log "cache do Nginx limpo"
 log "OK ${TAG}"
