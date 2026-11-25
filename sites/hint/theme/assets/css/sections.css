@@ -1,16 +1,24 @@
 /**
- * HINT content sections (front page) and the "Coming soon" placeholder page.
+ * HINT content sections (front page) — shared rules only.
  * Tokens only — no new colors beyond the design system.
+ *
+ * Section-specific styles live in assets/css/sections/<name>.css, loaded
+ * after this file. Keep here what every section uses: buttons outside the
+ * header, the section shell, headings, lead/text, actions and the generic
+ * facts list.
  */
 
-/* ——— Buttons (outside the header) ——— */
+/* ——— Buttons (outside the header) ———
+ * Sizes in rem so data-text="2|3" scales them; min-height instead of a fixed
+ * height so long labels wrap instead of clipping. */
 a.hint-button.hint-button--solid,
 a.hint-button.hint-button--ghost,
-.hint-section a.hint-button.hint-button--outline,
-.hint-soon a.hint-button.hint-button--outline {
-	height: 48px;
+.hint-section a.hint-button.hint-button--outline {
+	height: auto;
+	min-height: 3rem;
+	padding-block: var(--hint-space-1);
 	padding-inline: var(--hint-space-3);
-	font-size: 15px;
+	font-size: 0.9375rem;
 	text-decoration: none;
 }
 
@@ -41,17 +49,14 @@ a.hint-button.hint-button--ghost:focus-visible {
 }
 
 /* On light sections. */
-.hint-section a.hint-button.hint-button--outline,
-.hint-soon a.hint-button.hint-button--outline {
+.hint-section a.hint-button.hint-button--outline {
 	background-color: transparent;
 	border-color: var(--hint-color-text);
 	color: var(--hint-color-text);
 }
 
 .hint-section a.hint-button.hint-button--outline:hover,
-.hint-section a.hint-button.hint-button--outline:focus-visible,
-.hint-soon a.hint-button.hint-button--outline:hover,
-.hint-soon a.hint-button.hint-button--outline:focus-visible {
+.hint-section a.hint-button.hint-button--outline:focus-visible {
 	border-color: var(--hint-color-accent-hover);
 	color: var(--hint-color-accent-hover);
 }
@@ -86,11 +91,14 @@ a.hint-button.hint-button--ghost:focus-visible {
 	align-items: start;
 }
 
+/* ——— Heading ———
+ * Heading and <p> rules carry the `.hint-home` prefix (0,2,0) to outweigh the
+ * Elementor kit's `.elementor-kit-N h2|p` rules (0,1,1); see base.css. */
 .hint-section__head {
 	margin-bottom: var(--hint-space-5);
 }
 
-.hint-section__eyebrow {
+.hint-home .hint-section__eyebrow {
 	margin: 0 0 var(--hint-space-2);
 	font-family: var(--hint-font-body);
 	font-size: var(--hint-text-small);
@@ -100,7 +108,7 @@ a.hint-button.hint-button--ghost:focus-visible {
 	color: var(--hint-color-text-secondary);
 }
 
-.hint-section__title {
+.hint-home .hint-section__title {
 	margin: 0;
 	font-family: var(--hint-font-heading);
 	font-size: var(--hint-text-h2);
@@ -110,7 +118,8 @@ a.hint-button.hint-button--ghost:focus-visible {
 	color: var(--hint-color-text);
 }
 
-.hint-section__lead {
+/* ——— Copy ——— */
+.hint-home .hint-section__lead {
 	margin: 0 0 var(--hint-space-3);
 	font-family: var(--hint-font-heading);
 	font-size: var(--hint-text-h4);
@@ -119,21 +128,16 @@ a.hint-button.hint-button--ghost:focus-visible {
 	color: var(--hint-color-text);
 }
 
-.hint-section__lead--topics {
-	max-width: 46em;
-	margin: calc(-1 * var(--hint-space-3)) 0 var(--hint-space-5);
-	font-family: var(--hint-font-body);
-	font-size: var(--hint-text-body);
-	font-weight: var(--hint-weight-regular);
-	color: var(--hint-color-text-secondary);
-}
-
 .hint-section__text {
 	margin: 0;
 	font-family: var(--hint-font-body);
 	font-size: var(--hint-text-body);
 	line-height: var(--hint-leading-body);
 	color: var(--hint-color-text-secondary);
+}
+
+.hint-section__text + .hint-section__text {
+	margin-top: var(--hint-space-3);
 }
 
 .hint-section__actions {
@@ -167,69 +171,7 @@ a.hint-button.hint-button--ghost:focus-visible {
 	color: var(--hint-color-accent);
 }
 
-/* ——— Topics ——— */
-.hint-section--topics {
-	background-color: #ffffff;
-}
-
-.hint-topics {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: var(--hint-space-5) var(--hint-space-4);
-}
-
-.hint-topic {
-	padding-top: var(--hint-space-3);
-	border-top: 2px solid var(--hint-color-text);
-}
-
-.hint-topic__number {
-	margin: 0 0 var(--hint-space-2);
-	font-family: var(--hint-font-heading);
-	font-size: var(--hint-text-small);
-	font-weight: var(--hint-weight-bold);
-	letter-spacing: 0.14em;
-	color: var(--hint-color-text-secondary);
-}
-
-.hint-topic__title {
-	margin: 0 0 var(--hint-space-3);
-	font-family: var(--hint-font-heading);
-	font-size: var(--hint-text-h4);
-	font-weight: var(--hint-weight-bold);
-	line-height: 1.2;
-	letter-spacing: -0.02em;
-	color: var(--hint-color-text);
-}
-
-.hint-topic__list {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	font-family: var(--hint-font-body);
-	font-size: 16px;
-	line-height: 1.5;
-	color: var(--hint-color-text-secondary);
-}
-
-.hint-topic__list li {
-	position: relative;
-	padding-block: 10px;
-	padding-inline-start: var(--hint-space-3);
-	border-top: var(--hint-border-width) solid var(--hint-color-border);
-}
-
-.hint-topic__list li::before {
-	content: "";
-	position: absolute;
-	inset-inline-start: 0;
-	top: 1.1em;
-	width: 8px;
-	height: 8px;
-	background-color: var(--hint-color-accent);
-}
-
-/* ——— Call for Papers: facts list ——— */
+/* ——— Facts list (label / value rows, e.g. dates and formats) ——— */
 .hint-facts {
 	margin: 0;
 	border-top: var(--hint-border-width) solid var(--hint-color-text);
@@ -256,7 +198,7 @@ a.hint-button.hint-button--ghost:focus-visible {
 .hint-facts dd {
 	margin: 0;
 	font-family: var(--hint-font-heading);
-	font-size: 20px;
+	font-size: 1.25rem;
 	font-weight: var(--hint-weight-medium);
 	color: var(--hint-color-text);
 }
@@ -265,251 +207,8 @@ a.hint-button.hint-button--ghost:focus-visible {
 	color: var(--hint-color-text-secondary);
 }
 
-/* ——— Program (dark band) ——— */
-.hint-section--program {
-	background-color: var(--hint-color-accent-dark);
-	border-top-color: var(--hint-color-accent-dark);
-	color: #ffffff;
-}
-
-.hint-section--program .hint-section__title,
-.hint-section--program .hint-section__lead {
-	color: #ffffff;
-}
-
-.hint-section--program .hint-section__eyebrow {
-	color: rgba(255, 255, 255, 0.7);
-}
-
-/* Program: opening, blocks, sessions, speaker placeholders (on the dark band). */
-.hint-program__opening {
-	display: flex;
-	align-items: baseline;
-	gap: var(--hint-space-2);
-	margin: var(--hint-space-5) 0 0;
-	padding-block: var(--hint-space-3);
-	border-block: var(--hint-border-width) solid rgba(255, 255, 255, 0.25);
-	font-family: var(--hint-font-heading);
-	font-size: var(--hint-text-h4);
-	font-weight: var(--hint-weight-bold);
-	color: #ffffff;
-}
-
-.hint-program__time {
-	color: var(--hint-color-accent);
-}
-
-.hint-program__block {
-	margin-top: var(--hint-space-6);
-}
-
-.hint-section--program .hint-program__block-title {
-	margin: 0 0 var(--hint-space-3);
-	font-family: var(--hint-font-body);
-	font-size: var(--hint-text-small);
-	font-weight: var(--hint-weight-semibold);
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-	color: var(--hint-color-accent);
-}
-
-.hint-program__sessions {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: var(--hint-space-4);
-}
-
-.hint-session {
-	padding: var(--hint-space-4);
-	border: var(--hint-border-width) solid rgba(255, 255, 255, 0.25);
-	border-radius: var(--hint-radius-md);
-}
-
-.hint-session__number {
-	margin: 0 0 var(--hint-space-1);
-	font-family: var(--hint-font-heading);
-	font-size: var(--hint-text-small);
-	font-weight: var(--hint-weight-bold);
-	letter-spacing: 0.14em;
-	color: rgba(255, 255, 255, 0.6);
-}
-
-.hint-section--program .hint-session__title {
-	margin: 0;
-	font-family: var(--hint-font-heading);
-	font-size: var(--hint-text-h4);
-	font-weight: var(--hint-weight-bold);
-	line-height: 1.2;
-	letter-spacing: -0.02em;
-	color: #ffffff;
-}
-
-.hint-session__subtitle {
-	margin: var(--hint-space-1) 0 0;
-	font-family: var(--hint-font-body);
-	font-size: 16px;
-	line-height: 1.5;
-	color: rgba(255, 255, 255, 0.75);
-}
-
-.hint-session__speakers {
-	list-style: none;
-	margin: var(--hint-space-3) 0 0;
-	padding: 0;
-	display: grid;
-	gap: var(--hint-space-2);
-}
-
-.hint-speaker {
-	display: flex;
-	align-items: center;
-	gap: var(--hint-space-2);
-}
-
-.hint-avatar {
-	display: inline-flex;
-	flex: 0 0 auto;
-	align-items: center;
-	justify-content: center;
-	width: 48px;
-	height: 48px;
-	overflow: hidden;
-	border-radius: 50%;
-	background-color: rgba(255, 255, 255, 0.12);
-	color: rgba(255, 255, 255, 0.45);
-}
-
-.hint-avatar__svg,
-.hint-avatar img {
-	display: block;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-}
-
-.hint-speaker__text {
-	display: flex;
-	flex-direction: column;
-	min-width: 0;
-}
-
-.hint-speaker__role {
-	font-family: var(--hint-font-body);
-	font-size: 12px;
-	font-weight: var(--hint-weight-semibold);
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	color: rgba(255, 255, 255, 0.6);
-}
-
-.hint-speaker__name {
-	font-family: var(--hint-font-body);
-	font-size: 16px;
-	font-weight: var(--hint-weight-medium);
-	color: #ffffff;
-}
-
-.hint-speaker--tbd .hint-speaker__name {
-	color: rgba(255, 255, 255, 0.7);
-}
-
-.hint-speaker__affil {
-	font-family: var(--hint-font-body);
-	font-size: var(--hint-text-small);
-	color: rgba(255, 255, 255, 0.7);
-}
-
-/* ——— Venue ——— */
-.hint-venue {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-	padding-inline-start: var(--hint-space-3);
-	border-inline-start: 4px solid var(--hint-color-accent);
-	font-family: var(--hint-font-body);
-	font-style: normal;
-	font-size: var(--hint-text-body);
-	line-height: 1.5;
-	color: var(--hint-color-text-secondary);
-}
-
-.hint-venue__name {
-	margin-bottom: var(--hint-space-1);
-	font-family: var(--hint-font-heading);
-	font-size: var(--hint-text-h4);
-	font-weight: var(--hint-weight-bold);
-	line-height: 1.2;
-	color: var(--hint-color-text);
-}
-
-/* ——— "Coming soon" placeholder page ——— */
-.hint-soon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	min-height: calc(100vh - var(--hint-header-height) - 160px);
-	padding: var(--hint-space-7) var(--hint-space-3);
-	box-sizing: border-box;
-}
-
-.hint-soon__box {
-	width: min(100%, 40rem);
-}
-
-.hint-soon__eyebrow {
-	margin: 0 0 var(--hint-space-2);
-	font-family: var(--hint-font-body);
-	font-size: var(--hint-text-small);
-	font-weight: var(--hint-weight-semibold);
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-	color: var(--hint-color-text-secondary);
-}
-
-.hint-soon__title {
-	margin: 0;
-	font-family: var(--hint-font-heading);
-	font-size: clamp(3rem, 10vw, 5.5rem);
-	font-weight: var(--hint-weight-bold);
-	line-height: 0.95;
-	letter-spacing: -0.04em;
-	text-transform: uppercase;
-	color: var(--hint-color-text);
-}
-
-.hint-soon__text {
-	margin: var(--hint-space-3) 0 0;
-	font-family: var(--hint-font-body);
-	font-size: var(--hint-text-body);
-	line-height: var(--hint-leading-body);
-	color: var(--hint-color-text-secondary);
-}
-
-.hint-soon__meta {
-	margin: var(--hint-space-3) 0 0;
-	font-family: var(--hint-font-heading);
-	font-size: var(--hint-text-h4);
-	font-weight: var(--hint-weight-medium);
-	color: var(--hint-color-text);
-}
-
-.hint-soon__actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--hint-space-2);
-	margin-top: var(--hint-space-4);
-}
-
 /* ——— Responsive ——— */
 @media (max-width: 1023px) {
-	.hint-program__sessions {
-		grid-template-columns: minmax(0, 1fr);
-	}
-
-	.hint-topics {
-		grid-template-columns: minmax(0, 1fr);
-	}
-
 	.hint-section__inner--split {
 		grid-template-columns: minmax(0, 1fr);
 		gap: var(--hint-space-4);
@@ -521,12 +220,7 @@ a.hint-button.hint-button--ghost:focus-visible {
 		padding-block: var(--hint-space-6);
 	}
 
-	.hint-session {
-		padding: var(--hint-space-3);
-	}
-
-	.hint-section__lead,
-	.hint-venue__name {
-		font-size: 20px;
+	.hint-home .hint-section__lead {
+		font-size: 1.25rem;
 	}
 }

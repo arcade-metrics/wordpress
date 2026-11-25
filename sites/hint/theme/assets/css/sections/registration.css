@@ -1,0 +1,90 @@
+/**
+ * HINT — Registration section (#registration, .hint-section--registration).
+ * Loaded after sections.css; shared rules (shell, heading, copy, buttons)
+ * live there. Tokens only — no new colors beyond the design system.
+ */
+
+.hint-registration__intro .hint-section__head {
+	margin-bottom: var(--hint-space-4);
+}
+
+.hint-registration__action {
+	padding: var(--hint-space-4);
+	background-color: var(--hint-color-surface);
+	border: var(--hint-border-width) solid var(--hint-color-card-border);
+	border-radius: var(--hint-radius-md);
+	box-shadow: var(--hint-shadow-card);
+}
+
+/* `.hint-home` prefix (0,2,0): keeps the bottom margin over the kit's `p` rule. */
+.hint-home .hint-registration__cta {
+	margin: 0 0 var(--hint-space-3);
+}
+
+/* Even3 button (same themed text button in both languages). */
+.hint-section--registration a.hint-even3:focus-visible,
+.hint-registration__link:focus-visible {
+	outline: var(--hint-focus-width) solid var(--hint-color-focus);
+	outline-offset: 3px;
+}
+
+.hint-registration__access {
+	margin: 0;
+}
+
+/* Color comes from base.css (content links take the text color, hover token). */
+.hint-registration__link {
+	display: inline-block;
+	margin-top: var(--hint-space-1);
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+	font-weight: var(--hint-weight-medium);
+}
+
+.hint-registration__calendar {
+	margin-top: var(--hint-space-4);
+	padding-top: var(--hint-space-3);
+	border-top: var(--hint-border-width) solid var(--hint-color-border);
+}
+
+.hint-home .hint-registration__calendar-title {
+	margin: 0 0 var(--hint-space-1);
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h4);
+	font-weight: var(--hint-weight-semibold);
+	line-height: 1.25;
+	color: var(--hint-color-text);
+}
+
+/* List used as a button row: drop list styling, keep semantics. */
+.hint-registration__calendar-links {
+	padding: 0;
+	list-style: none;
+}
+
+.hint-registration__calendar-links li {
+	margin: 0;
+}
+
+.hint-registration__calendar-links a.hint-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.hint-calendar-icon {
+	flex: none;
+	width: 1.125rem;
+	height: 1.125rem;
+}
+
+.hint-registration__calendar-links a.hint-button:focus-visible {
+	outline: var(--hint-focus-width) solid var(--hint-color-focus);
+	outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+	.hint-registration__action {
+		padding: var(--hint-space-3);
+	}
+}

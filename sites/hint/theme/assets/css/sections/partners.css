@@ -1,0 +1,72 @@
+/**
+ * HINT — Organisers and supporters section (#partners, .hint-section--partners).
+ * Loaded after sections.css; shared rules (shell) live there.
+ *
+ * The logos are inline SVGs: their monochrome parts use currentColor, set
+ * here per theme, so they sit on the page background with no white panel.
+ * Light: black (FAPESP keeps its brand blue). Dark and high contrast: white.
+ * The brand colours below are the only values outside the design tokens.
+ */
+
+.hint-section--partners {
+	padding-block: var(--hint-space-6);
+}
+
+/* h2 used as an eyebrow: `.hint-home` prefix outweighs the kit's h2 size. */
+.hint-home .hint-partners__title {
+	margin: 0 0 var(--hint-space-4);
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-small);
+	font-weight: var(--hint-weight-semibold);
+	line-height: 1.4;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--hint-color-text-secondary);
+}
+
+.hint-partners__logos {
+	--hint-logo-ink: #000000;
+	--hint-logo-fapesp: #324b89;
+
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--hint-space-4) var(--hint-space-6);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+:root[data-theme="dark"] .hint-partners__logos,
+:root[data-theme="contrast"] .hint-partners__logos {
+	--hint-logo-ink: #ffffff;
+	--hint-logo-fapesp: #ffffff;
+}
+
+.hint-partners__item {
+	margin: 0;
+}
+
+.hint-partners__link {
+	display: inline-block;
+	line-height: 0;
+	border-radius: var(--hint-radius-sm);
+}
+
+/* Colour set on the <svg> itself so link and hover colours never reach the ink. */
+.hint-partners__logo {
+	display: block;
+	width: auto;
+	height: 3.5rem;
+	max-width: 100%;
+	color: var(--hint-logo-ink);
+}
+
+.hint-partners__item--fapesp .hint-partners__logo {
+	color: var(--hint-logo-fapesp);
+}
+
+/* PATER's wordmark is small inside its cube composition: give it more room. */
+.hint-partners__item--pater .hint-partners__logo {
+	height: 5rem;
+}

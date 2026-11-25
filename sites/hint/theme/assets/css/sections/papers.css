@@ -1,0 +1,218 @@
+/**
+ * HINT — Papers section (#papers, .hint-section--papers).
+ * Loaded after sections.css; shared rules (shell, heading, copy, buttons,
+ * .hint-facts) live there. Tokens only — no new colors beyond the design system.
+ */
+
+/* ——— Deadlines: the first thing in the section ———
+ * Two large cards; the submission deadline is the accented one. */
+.hint-papers__deadlines {
+	display: grid;
+	grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+	gap: var(--hint-space-3);
+	margin: 0 0 var(--hint-space-5);
+}
+
+.hint-papers__deadline {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: var(--hint-space-2);
+	margin: 0;
+	padding: var(--hint-space-4);
+	background-color: var(--hint-color-surface);
+	border: var(--hint-border-width) solid var(--hint-color-card-border);
+	border-radius: var(--hint-radius-md);
+	box-shadow: var(--hint-shadow-card);
+}
+
+.hint-papers__deadline--main {
+	border-left: calc(var(--hint-border-width) * 6) solid var(--hint-color-accent);
+}
+
+.hint-papers__deadline dt {
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-small);
+	font-weight: var(--hint-weight-semibold);
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--hint-color-text-secondary);
+}
+
+.hint-papers__deadline dd {
+	margin: 0;
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h3);
+	font-weight: var(--hint-weight-bold);
+	line-height: var(--hint-leading-heading);
+	letter-spacing: -0.03em;
+	color: var(--hint-color-text);
+}
+
+.hint-papers__deadline--main dd {
+	font-size: var(--hint-text-h2);
+}
+
+.hint-papers__call {
+	max-width: 760px;
+}
+
+/* Lists used as button rows: drop list styling, keep semantics. */
+.hint-papers__buttons {
+	list-style: none;
+	padding: 0;
+}
+
+.hint-papers__buttons li {
+	margin: 0;
+}
+
+.hint-papers__buttons a.hint-button {
+	text-align: center;
+}
+
+.hint-papers__areas {
+	max-width: 760px;
+	margin-top: var(--hint-space-6);
+	padding-top: var(--hint-space-5);
+	border-top: var(--hint-border-width) solid var(--hint-color-border);
+}
+
+.hint-home .hint-papers__areas .hint-section__soon {
+	margin-top: 0;
+}
+
+/* Presentation guidelines: one <details>, collapsed until asked for. */
+.hint-papers__details {
+	max-width: 760px;
+	margin-top: var(--hint-space-5);
+	background-color: var(--hint-color-surface);
+	border: var(--hint-border-width) solid var(--hint-color-card-border);
+	border-radius: var(--hint-radius-md);
+	box-shadow: var(--hint-shadow-card);
+}
+
+.hint-papers__details-head {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--hint-space-2);
+	padding: var(--hint-space-3);
+	list-style: none;
+	cursor: pointer;
+	color: var(--hint-color-text);
+	border-radius: var(--hint-radius-md);
+}
+
+.hint-papers__details-text {
+	display: grid;
+	gap: 0.25rem;
+}
+
+.hint-papers__details-title {
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h4);
+	font-weight: var(--hint-weight-semibold);
+	line-height: 1.3;
+}
+
+.hint-papers__details-hint {
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-small);
+	line-height: 1.45;
+	color: var(--hint-color-text-secondary);
+}
+
+.hint-papers__details-head::-webkit-details-marker {
+	display: none;
+}
+
+.hint-papers__details-head:hover {
+	color: var(--hint-color-link-hover);
+}
+
+/* Chevron: points down when closed, up when open. */
+.hint-papers__details-head::after {
+	content: "";
+	flex: none;
+	width: 0.625rem;
+	height: 0.625rem;
+	margin: 0.375rem 0.25rem 0 auto;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: rotate(45deg);
+}
+
+.hint-papers__details[open] > .hint-papers__details-head::after {
+	margin-top: 0.625rem;
+	transform: rotate(-135deg);
+}
+
+.hint-papers__details-body {
+	padding: 0 var(--hint-space-3) var(--hint-space-3);
+}
+
+/* `.hint-home` prefix (0,2,0) outweighs the kit's h3/h4 px sizes; see base.css. */
+.hint-home .hint-papers__subtitle {
+	margin: 0 0 var(--hint-space-3);
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h3);
+	font-weight: var(--hint-weight-bold);
+	line-height: var(--hint-leading-heading);
+	letter-spacing: -0.02em;
+	color: var(--hint-color-text);
+}
+
+.hint-home .hint-papers__minor {
+	margin: var(--hint-space-4) 0 var(--hint-space-2);
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h4);
+	font-weight: var(--hint-weight-semibold);
+	color: var(--hint-color-text);
+}
+
+.hint-papers__specs {
+	margin: 0 0 var(--hint-space-4);
+	padding: 0;
+	list-style: none;
+	border-top: var(--hint-border-width) solid var(--hint-color-text);
+}
+
+.hint-papers__specs li {
+	display: grid;
+	grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+	gap: var(--hint-space-1) var(--hint-space-3);
+	padding-block: var(--hint-space-2);
+	border-bottom: var(--hint-border-width) solid var(--hint-color-border);
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-body);
+	line-height: var(--hint-leading-body);
+	color: var(--hint-color-text-secondary);
+}
+
+.hint-papers__specs strong,
+.hint-papers__details .hint-section__text strong {
+	font-weight: var(--hint-weight-semibold);
+	color: var(--hint-color-text);
+}
+
+.hint-papers__poster-link {
+	margin-top: var(--hint-space-4);
+}
+
+.hint-papers__details a.hint-button:focus-visible,
+.hint-papers__buttons a.hint-button:focus-visible {
+	outline: var(--hint-focus-width) solid var(--hint-color-focus);
+	outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+	.hint-papers__deadlines {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+@media (max-width: 599px) {
+	.hint-papers__specs li {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
