@@ -1,4 +1,4 @@
-# CI: roda em todo PR. Sobe a rede do zero, roda o setup duas vezes (idempotência) e o smoke test.
+# CI: roda em todo PR. Lint + scripts/test-local.sh (fluxo 1, igual ao local). O deploy (fluxo 2) é o deploy.yml.
 name: CI
 
 on:
@@ -35,14 +35,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Subir a rede
-        run: docker compose up -d --build --wait
-      - name: Setup (1ª vez)
-        run: bash scripts/setup-local.sh
-      - name: Setup (2ª vez, idempotência)
-        run: bash scripts/setup-local.sh
-      - name: Smoke test
-        run: bash scripts/smoke-test.sh
+      - name: Teste local (o mesmo script que se roda na máquina)
+        run: bash scripts/test-local.sh
       - name: Memória dos containers
         if: always()
         run: docker stats --no-stream
