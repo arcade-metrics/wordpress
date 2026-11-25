@@ -39,9 +39,10 @@ bash scripts/wp.sh site list    # WP-CLI; para comandos de site use --url=
 
 Passo a passo, se preferir: `docker compose up -d --build`, `bash scripts/setup-local.sh`, `bash scripts/smoke-test.sh`.
 
-**2. Subir na EC2** (`.github/workflows/deploy.yml`): merge no `main` → CI → imagem no GHCR → SSM na `ciatec-games`
-→ `server/deploy.sh` (smoke test e reversão automática). Reimplantar ou reverter: Actions → Deploy → Run workflow
-com a tag (ex.: `sha-abc1234`). Exige `vars.AWS_DEPLOY_ROLE_ARN` e `vars.DEPLOY_INSTANCE_ID`; sem elas só publica a imagem.
+**2. Subir na EC2** — manual, por decisão de 2026-11-25 (`docs/runbooks/deploy-manual.md`): merge no `main` → CI →
+imagem publicada em `ghcr.io/arcade-metrics/wordpress:sha-<commit>` pelo `deploy.yml` (o job `deploy` fica pulado: o GitHub
+não tem credencial AWS). Depois, um operador roda `server/deploy.sh <tag>` na `ciatec-games` via SSM, a partir de uma
+sessão em `D:\ciatec\aws-cli`. Merge sozinho **não** atualiza o site.
 
 ## Regras
 

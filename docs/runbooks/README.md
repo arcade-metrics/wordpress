@@ -9,6 +9,5 @@ verificar e como reverter. São escritos junto com a spec correspondente.
 | Nginx e certificados dos domínios | 04 | a escrever (F3) |
 | Criar bucket de backup e papéis IAM (OIDC, instância) | 07, 08 | a escrever (F3/F4) |
 | Restaurar a rede a partir do backup | 07 | a escrever (F4) |
-| Primeiro deploy e go-live | 08 | a escrever (F4) |
-| Reverter um deploy | 08 | a escrever (F4) |
+| [Deploy manual em produção (e reverter)](deploy-manual.md) | 08 | escrito (2026-11-25) |
 | Adicionar um site à rede | 02 | a escrever (F5) |

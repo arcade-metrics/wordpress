@@ -1,6 +1,8 @@
 # 0005 — Deploy por GitHub Actions, GHCR e SSM
 
-- **Status:** proposta (validar na F4)
+- **Status:** parcialmente adotada (2026-11-25): itens 1 e 2-build valem; o disparo por SSM a partir do Actions **não**
+  foi ligado — o deploy é manual, por operador com `ciatec-cli` (`docs/runbooks/deploy-manual.md`). OIDC + papel IAM
+  ficam como opção futura.
 - **Data:** 2026-11-13
 
 ## Contexto
