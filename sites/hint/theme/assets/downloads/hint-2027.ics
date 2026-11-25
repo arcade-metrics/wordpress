@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//HINT 2027//hint.ciatec.org//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:hint-2027@hint.ciatec.org
+DTSTAMP:20261125T120000Z
+DTSTART:20270225T110000Z
+DTEND:20270225T210000Z
+SUMMARY:HINT 2027 – International Congress of Human-Centred Inclusive New Technologies
+LOCATION:EACH-USP\, Auditório Vermelho\, Rua Arlindo Béttio\, 1000\, Ermelino Matarazzo\, São Paulo - SP\, Brasil
+DESCRIPTION:Programação\, inscrição e como chegar / Programme\, registration and getting there: https://hint.ciatec.org/
+URL:https://hint.ciatec.org/
+END:VEVENT
+END:VCALENDAR

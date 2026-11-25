@@ -1,0 +1,23 @@
+/**
+ * HINT — About section (#about, .hint-section--about).
+ * Loaded after sections.css; shared rules (shell, heading, copy, buttons)
+ * live there. Tokens only — no new colors beyond the design system.
+ */
+
+.hint-about__body {
+	display: grid;
+	grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+	gap: var(--hint-space-6);
+	align-items: start;
+}
+
+.hint-about__body .hint-section__lead {
+	margin: 0;
+}
+
+@media (max-width: 1023px) {
+	.hint-about__body {
+		grid-template-columns: minmax(0, 1fr);
+		gap: var(--hint-space-3);
+	}
+}

@@ -1,14 +1,19 @@
 /**
  * HINT Header
  * Height ~80px, flat, dark translucent chrome, blue used only as accent.
+ *
+ * Sizes are in rem so the text-size levels (data-text on <html>) scale the
+ * chrome with the content; widths and breakpoints stay in px.
  */
 
 :root {
-	--hint-header-height: 80px;
+	--hint-header-height: 5rem;
 	--hint-header-max-width: 1140px;
 	/* Shared dark chrome (header + footer). */
 	--hint-chrome-bg: rgba(17, 17, 17, 0.68);
-	--hint-header-bg: rgba(17, 17, 17, 0.48);
+	/* 0.82 keeps the white menu text above 10:1 when the bar floats over the
+	 * light sections (#F7F6F2 / #fff); 0.48 fell to ~3.5:1 there. */
+	--hint-header-bg: rgba(17, 17, 17, 0.82);
 	--hint-chrome-fg: #ffffff;
 	--hint-chrome-fg-muted: rgba(255, 255, 255, 0.78);
 	--hint-chrome-border: rgba(255, 255, 255, 0.2);
@@ -18,6 +23,8 @@
 	/* Flag artwork is 100x60, so keep the 5:3 ratio. */
 	--hint-flag-width: 25px;
 	--hint-flag-height: 15px;
+	/* Icon buttons (theme, accessibility) and the CTAs share this height. */
+	--hint-control-size: 2.25rem;
 }
 
 .hint-header {
@@ -63,7 +70,7 @@ body.hint-fixed-header:not(.hint-front) {
 .hint-header__logo img {
 	display: block;
 	width: auto;
-	height: 26px;
+	height: 1.625rem;
 }
 
 /* ——— Navigation ——— */
@@ -78,7 +85,7 @@ body.hint-fixed-header:not(.hint-front) {
 
 .hint-nav__list a {
 	font-family: var(--hint-font-body);
-	font-size: 16px;
+	font-size: 1rem;
 	font-weight: var(--hint-weight-medium);
 	line-height: 1.2;
 	color: var(--hint-chrome-fg);
@@ -117,11 +124,12 @@ body.hint-fixed-header:not(.hint-front) {
 	justify-content: center;
 	box-sizing: border-box;
 	font-family: var(--hint-font-body);
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: var(--hint-weight-semibold);
-	line-height: 1;
+	line-height: 1.2;
+	text-align: center;
 	text-decoration: none;
-	padding: 0 var(--hint-space-2);
+	padding: 0.5em var(--hint-space-2);
 	border: var(--hint-border-width) solid transparent;
 	border-radius: var(--hint-radius);
 	box-shadow: none;
@@ -129,9 +137,9 @@ body.hint-fixed-header:not(.hint-front) {
 	transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-/* Match theme-toggle icon button height (36px). */
+/* Match the icon buttons' height; min-height so long labels never clip. */
 .hint-header .hint-button--primary {
-	height: 36px;
+	min-height: var(--hint-control-size);
 	background-color: var(--hint-chrome-accent);
 	border-color: var(--hint-chrome-accent);
 	color: var(--hint-color-on-accent);
@@ -141,12 +149,12 @@ body.hint-fixed-header:not(.hint-front) {
 .hint-header .hint-button--primary:focus-visible {
 	background-color: var(--hint-chrome-accent-hover);
 	border-color: var(--hint-chrome-accent-hover);
-	color: #ffffff;
+	color: var(--hint-color-on-accent-hover);
 }
 
 /* Submit a Paper: outlined next to the filled Register button. */
 .hint-header a.hint-button--outline {
-	height: 36px;
+	min-height: var(--hint-control-size);
 	background-color: transparent;
 	border-color: var(--hint-chrome-fg-muted);
 	color: var(--hint-chrome-fg);
@@ -158,7 +166,7 @@ body.hint-fixed-header:not(.hint-front) {
 	color: var(--hint-chrome-accent-hover);
 }
 
-/* ——— Language switcher (inert until a translation plugin is added) ——— */
+/* ——— Language switcher ——— */
 .hint-lang {
 	position: relative;
 	display: inline-flex;
@@ -211,7 +219,7 @@ body.hint-fixed-header:not(.hint-front) {
  * Scoped under .hint-header so they outweigh the Elementor kit rule
  * `.elementor-kit-N button`, which would otherwise paint them accent blue.
  */
-.hint-header .hint-theme-toggle,
+.hint-header .hint-a11y__trigger,
 .hint-header .hint-header__toggle,
 .hint-header .hint-lang__trigger,
 .hint-header .hint-lang__option {
@@ -228,8 +236,9 @@ body.hint-fixed-header:not(.hint-front) {
 	justify-content: center;
 }
 
-.hint-header .hint-theme-toggle:hover,
-.hint-header .hint-theme-toggle:focus-visible,
+.hint-header .hint-a11y__trigger:hover,
+.hint-header .hint-a11y__trigger:focus-visible,
+.hint-header .hint-a11y__trigger[aria-expanded="true"],
 .hint-header .hint-header__toggle:hover,
 .hint-header .hint-header__toggle:focus-visible {
 	background: transparent;
@@ -255,29 +264,174 @@ body.hint-fixed-header:not(.hint-front) {
 	border-color: var(--hint-chrome-accent-hover);
 }
 
-/* ——— Theme toggle placeholder ——— */
-.hint-header .hint-theme-toggle {
+/* ——— Accessibility panel ———
+ * Trigger (universal access icon) + popover with pressed-state buttons.
+ * State lives on <html> (data-theme / data-text); assets/js/a11y.js keeps
+ * every instance (desktop, mobile) in sync.
+ */
+.hint-a11y {
+	position: relative;
 	display: inline-flex;
-	width: 36px;
-	height: 36px;
+	align-items: center;
 }
 
-.hint-theme-toggle__icon {
+.hint-header .hint-a11y__trigger {
+	display: inline-flex;
+	width: var(--hint-control-size);
+	height: var(--hint-control-size);
+	flex: 0 0 auto;
+}
+
+.hint-a11y__icon {
 	display: block;
+	width: 1.25rem;
+	height: 1.25rem;
+}
+
+.hint-a11y__panel {
+	position: absolute;
+	top: calc(100% + var(--hint-space-1));
+	right: 0;
+	z-index: 20;
+	box-sizing: border-box;
+	width: max-content;
+	min-width: 16rem;
+	max-width: min(22rem, calc(100vw - 2 * var(--hint-space-3)));
+	margin: 0;
+	padding: var(--hint-space-2);
+	display: flex;
+	flex-direction: column;
+	gap: var(--hint-space-2);
+	color: var(--hint-chrome-fg);
+	background-color: var(--hint-chrome-panel);
+	border: var(--hint-border-width) solid var(--hint-chrome-border);
+	border-radius: var(--hint-radius);
+	box-shadow: none;
+	text-align: left;
+}
+
+.hint-a11y__panel[hidden] {
+	display: none;
+}
+
+.hint-a11y__title,
+.hint-a11y__label {
+	margin: 0;
+	font-family: var(--hint-font-body);
+	line-height: 1.3;
+	color: var(--hint-chrome-fg);
+}
+
+.hint-a11y__title {
+	font-size: 0.9375rem;
+	font-weight: var(--hint-weight-semibold);
+	padding-bottom: var(--hint-space-1);
+	border-bottom: var(--hint-border-width) solid var(--hint-chrome-border);
+}
+
+.hint-a11y__label {
+	font-size: 0.75rem;
+	font-weight: var(--hint-weight-semibold);
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--hint-chrome-fg-muted);
+	margin-bottom: var(--hint-space-1);
+}
+
+.hint-a11y__options {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--hint-space-1);
+}
+
+.hint-header .hint-a11y__option,
+.hint-header .hint-a11y__reset {
+	appearance: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-height: var(--hint-control-size);
+	padding: 0.4em 0.9em;
+	font-family: var(--hint-font-body);
+	font-size: 0.875rem;
+	font-weight: var(--hint-weight-medium);
+	line-height: 1.2;
+	text-align: center;
+	color: var(--hint-chrome-fg);
+	background: transparent;
+	background-image: none;
+	border: var(--hint-border-width) solid var(--hint-chrome-border);
+	border-radius: var(--hint-radius);
+	box-shadow: none;
+	cursor: pointer;
+	transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.hint-header .hint-a11y__option:hover,
+.hint-header .hint-a11y__option:focus-visible,
+.hint-header .hint-a11y__reset:hover,
+.hint-header .hint-a11y__reset:focus-visible {
+	background: transparent;
+	border-color: var(--hint-chrome-accent-hover);
+	color: var(--hint-chrome-fg);
+}
+
+/* Selected state: filled with the accent, like the Register button. */
+.hint-header .hint-a11y__option[aria-pressed="true"] {
+	background-color: var(--hint-chrome-accent);
+	border-color: var(--hint-chrome-accent);
+	color: var(--hint-color-on-accent);
+	font-weight: var(--hint-weight-semibold);
+}
+
+.hint-header .hint-a11y__option[aria-pressed="true"]:hover,
+.hint-header .hint-a11y__option[aria-pressed="true"]:focus-visible {
+	background-color: var(--hint-chrome-accent-hover);
+	border-color: var(--hint-chrome-accent-hover);
+	color: var(--hint-color-on-accent-hover);
+}
+
+.hint-header .hint-a11y__reset {
+	align-self: flex-start;
+	border-color: transparent;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	color: var(--hint-chrome-fg-muted);
+}
+
+/* Inside the mobile menu: trigger and language flags share a row, the panel
+ * opens as a full-width block under them (display: contents lets the flex row
+ * lay out the trigger and the panel separately). */
+.hint-header__mobile .hint-a11y {
+	display: contents;
+}
+
+.hint-header__mobile .hint-a11y__trigger {
+	order: 1;
+}
+
+.hint-header__mobile .hint-a11y__panel {
+	order: 3;
+	position: static;
+	flex: 1 0 100%;
+	width: 100%;
+	max-width: none;
+	margin-top: var(--hint-space-1);
 }
 
 /* ——— Mobile toggle ——— */
 .hint-header .hint-header__toggle {
 	display: none;
-	width: 44px;
-	height: 44px;
+	width: 2.75rem;
+	height: 2.75rem;
 }
 
 .hint-header__toggle-bars,
 .hint-header__toggle-bars::before,
 .hint-header__toggle-bars::after {
 	display: block;
-	width: 18px;
+	width: 1.125rem;
 	height: 1px;
 	background-color: var(--hint-chrome-fg);
 	transition: transform 0.15s ease, opacity 0.15s ease;
@@ -295,11 +449,11 @@ body.hint-fixed-header:not(.hint-front) {
 }
 
 .hint-header__toggle-bars::before {
-	transform: translateY(-6px);
+	transform: translateY(-0.375rem);
 }
 
 .hint-header__toggle-bars::after {
-	transform: translateY(6px);
+	transform: translateY(0.375rem);
 }
 
 .hint-header__toggle[aria-expanded="true"] .hint-header__toggle-bars {
@@ -317,9 +471,18 @@ body.hint-fixed-header:not(.hint-front) {
 /* ——— Mobile panel ——— */
 .hint-header__mobile {
 	display: none;
+	box-sizing: border-box;
+	max-height: calc(100vh - var(--hint-header-height));
+	max-height: calc(100dvh - var(--hint-header-height));
+	overflow-y: auto;
 	padding: var(--hint-space-3);
 	border-top: var(--hint-border-width) solid var(--hint-chrome-border);
 	background-color: var(--hint-chrome-panel);
+}
+
+/* Only the toggle (shown by the breakpoints below) can un-hide it. */
+.hint-header__mobile:not([hidden]) {
+	display: block;
 }
 
 .hint-nav--mobile .hint-nav__list {
@@ -347,15 +510,44 @@ body.hint-fixed-header:not(.hint-front) {
 
 .hint-header__mobile .hint-button {
 	width: 100%;
-	height: 44px;
+	min-height: 2.75rem;
 }
 
 .hint-header__mobile-utils {
 	display: flex;
-	align-items: center;
+	flex-wrap: wrap;
+	align-items: flex-start;
 	justify-content: space-between;
 	gap: var(--hint-space-2);
 	margin-top: var(--hint-space-3);
+}
+
+.hint-header__mobile-utils .hint-lang {
+	order: 2;
+	margin-inline-start: auto;
+	gap: var(--hint-space-1);
+}
+
+/* The mobile panel scrolls (overflow-y: auto), so an absolute dropdown under
+ * the flag gets clipped: lay the other flags out in flow, next to the trigger. */
+.hint-header__mobile .hint-lang__menu {
+	position: static;
+	flex-direction: row;
+	padding: 0;
+	border: 0;
+	background-color: transparent;
+}
+
+/* ——— High contrast: solid chrome, no blur, 2px rules ——— */
+:root[data-theme="contrast"] .hint-header {
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+}
+
+:root[data-theme="contrast"] .hint-nav__list a:hover,
+:root[data-theme="contrast"] .hint-nav__list a:focus-visible {
+	color: var(--hint-chrome-accent-hover);
+	border-bottom-width: 2px;
 }
 
 /* ——— Responsive ——— */
@@ -367,14 +559,14 @@ body.hint-fixed-header:not(.hint-front) {
 	}
 
 	.hint-nav__list a {
-		font-size: 15px;
+		font-size: 0.9375rem;
 	}
 }
 
 @media (max-width: 900px) {
 	.hint-header__nav,
 	.hint-header__actions .hint-lang,
-	.hint-header__actions .hint-theme-toggle,
+	.hint-header__actions .hint-a11y,
 	.hint-header__actions .hint-header__cta {
 		display: none;
 	}
@@ -382,9 +574,34 @@ body.hint-fixed-header:not(.hint-front) {
 	.hint-header .hint-header__toggle {
 		display: inline-flex;
 	}
+}
 
-	.hint-header__mobile:not([hidden]) {
-		display: block;
+/* Larger text needs the mobile menu sooner: the desktop bar overflows at
+ * 125% below ~1200px and at 150% below ~1440px (header.js reads the toggle's
+ * computed display, so it needs no breakpoint of its own). */
+@media (max-width: 1200px) {
+	:root[data-text="2"] .hint-header__nav,
+	:root[data-text="2"] .hint-header__actions .hint-lang,
+	:root[data-text="2"] .hint-header__actions .hint-a11y,
+	:root[data-text="2"] .hint-header__actions .hint-header__cta {
+		display: none;
+	}
+
+	:root[data-text="2"] .hint-header .hint-header__toggle {
+		display: inline-flex;
+	}
+}
+
+@media (max-width: 1440px) {
+	:root[data-text="3"] .hint-header__nav,
+	:root[data-text="3"] .hint-header__actions .hint-lang,
+	:root[data-text="3"] .hint-header__actions .hint-a11y,
+	:root[data-text="3"] .hint-header__actions .hint-header__cta {
+		display: none;
+	}
+
+	:root[data-text="3"] .hint-header .hint-header__toggle {
+		display: inline-flex;
 	}
 }
 

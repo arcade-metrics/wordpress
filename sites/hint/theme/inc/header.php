@@ -16,23 +16,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Navigation items used until a menu is assigned to the "Header" location.
  *
+ * Anchors match the section ids rendered by inc/sections/<name>.php, in the
+ * order of hint_get_home_sections().
+ *
  * @return array<int,array{title:string,url:string}>
  */
 function hint_get_fallback_nav_items() {
 	$items = array(
-		'about'           => __( 'About', 'hint' ),
-		'topics'          => __( 'Topics', 'hint' ),
-		'call-for-papers' => __( 'Call for Papers', 'hint' ),
-		'program'         => __( 'Program', 'hint' ),
-		'venue'           => __( 'Venue', 'hint' ),
+		'about'         => array(
+			'pt' => 'Sobre',
+			'en' => 'About',
+		),
+		'program'       => array(
+			'pt' => 'Programação',
+			'en' => 'Programme',
+		),
+		'registration'  => array(
+			'pt' => 'Inscrições',
+			'en' => 'Registration',
+		),
+		'papers'        => array(
+			'pt' => 'Trabalhos',
+			'en' => 'Papers',
+		),
+		'venue'         => array(
+			'pt' => 'Local',
+			'en' => 'Venue',
+		),
+		'accessibility' => array(
+			'pt' => 'Acessibilidade',
+			'en' => 'Accessibility',
+		),
 	);
 
 	$nav = array();
 
 	foreach ( $items as $anchor => $title ) {
 		$nav[] = array(
-			'title' => $title,
-			'url'   => home_url( '/#' . $anchor ),
+			'title' => hint_pick( $title ),
+			'url'   => hint_home_url( $anchor ),
 		);
 	}
 
@@ -79,43 +101,49 @@ function hint_render_nav_list( $id ) {
 }
 
 /**
- * Output the Register call to action (placeholder until registration opens).
+ * Output the Register call to action (links to the Registration section).
+ *
+ * Also used by the hero, so the context class (`hint-header__cta`) is passed
+ * by the caller instead of being built in.
  *
  * @param string $class Extra button classes.
  */
 function hint_render_register_cta( $class = 'hint-button--primary' ) {
 	printf(
-		'<a class="hint-button %s hint-header__cta" href="%s">%s</a>',
+		'<a class="hint-button %s" href="%s">%s</a>',
 		esc_attr( $class ),
-		esc_url( apply_filters( 'hint_register_url', hint_coming_soon_url( 'register' ) ) ),
+		esc_url( apply_filters( 'hint_register_url', hint_home_url( 'registration' ) ) ),
 		esc_html__( 'Register', 'hint' )
 	);
 }
 
 /**
- * Output the Submit a Paper call to action (placeholder until submissions open).
+ * Output the Submit a Paper call to action (links to the Papers section).
  *
  * @param string $class Extra button classes.
  */
 function hint_render_submit_cta( $class = 'hint-button--outline' ) {
 	printf(
-		'<a class="hint-button %s hint-header__cta" href="%s">%s</a>',
+		'<a class="hint-button %s" href="%s">%s</a>',
 		esc_attr( $class ),
-		esc_url( apply_filters( 'hint_submit_url', hint_coming_soon_url( 'submit' ) ) ),
+		esc_url( apply_filters( 'hint_submit_url', hint_home_url( 'papers' ) ) ),
 		esc_html__( 'Submit a Paper', 'hint' )
 	);
 }
 
 /**
- * Output both header calls to action.
+ * Output both header calls to action (desktop actions and mobile menu).
  */
 function hint_render_header_ctas() {
-	hint_render_submit_cta( 'hint-button--outline' );
-	hint_render_register_cta( 'hint-button--primary' );
+	hint_render_submit_cta( 'hint-button--outline hint-header__cta' );
+	hint_render_register_cta( 'hint-button--primary hint-header__cta' );
 }
 
 /**
  * Map Polylang language slugs to HINT flag assets.
+ *
+ * The site has two languages (sites/hint/seed.php): `en` (default) and `pt`.
+ * `es` is kept only so a future language gets its flag without code changes.
  *
  * @return array<string,string>
  */
@@ -130,50 +158,53 @@ function hint_get_flag_file_map() {
 /**
  * Resolve a HINT flag filename for a Polylang language slug.
  *
- * @param string $slug Polylang language slug (pt, en, es).
+ * @param string $slug Polylang language slug (pt, en).
  * @return string
  */
 function hint_flag_file_for_code( $slug ) {
 	$map = hint_get_flag_file_map();
 
-	return isset( $map[ $slug ] ) ? $map[ $slug ] : 'flag-br.svg';
+	return isset( $map[ $slug ] ) ? $map[ $slug ] : 'flag-uk.svg';
 }
 
 /**
- * Fallback languages when Polylang is inactive.
+ * Fallback languages when Polylang is inactive: the same two as the seed,
+ * current one (from hint_lang()) first, inert (no URLs).
  *
  * @return array<int,array{code:string,label:string,file:string,url:string,current:bool}>
  */
 function hint_get_fallback_languages() {
-	return array(
-		array(
-			'code'    => 'pt',
-			'label'   => __( 'Português', 'hint' ),
-			'file'    => 'flag-br.svg',
-			'url'     => '',
-			'current' => true,
-		),
+	$current = hint_lang();
+
+	$languages = array(
 		array(
 			'code'    => 'en',
 			'label'   => __( 'English', 'hint' ),
 			'file'    => 'flag-uk.svg',
 			'url'     => '',
-			'current' => false,
+			'current' => 'en' === $current,
 		),
 		array(
-			'code'    => 'es',
-			'label'   => __( 'Español', 'hint' ),
-			'file'    => 'flag-es.svg',
+			'code'    => 'pt',
+			'label'   => __( 'Português', 'hint' ),
+			'file'    => 'flag-br.svg',
 			'url'     => '',
-			'current' => false,
+			'current' => 'pt' === $current,
 		),
 	);
+
+	if ( 'pt' === $current ) {
+		$languages = array_reverse( $languages );
+	}
+
+	return $languages;
 }
 
 /**
  * Languages for the flag switcher, current one first.
  *
- * Built from Polylang's data (same source as the `ciatec` theme's switcher).
+ * Built from Polylang's data (same source as the `ciatec` theme's switcher):
+ * only the languages configured there are listed (en and pt, from the seed).
  * Falls back to inert placeholders when Polylang is inactive.
  *
  * @return array<int,array{code:string,label:string,file:string,url:string,current:bool}>
@@ -308,24 +339,104 @@ function hint_render_language_flags( $id = 'hint-lang' ) {
 }
 
 /**
- * Output the light/dark theme icon.
+ * Options offered by the accessibility panel.
  *
- * Placeholder control: no dark palette is defined yet, so it carries no
- * behaviour and is exposed as disabled to assistive technology.
+ * Values are the ones assets/js/a11y.js writes to <html> (data-theme and
+ * data-text) and to localStorage; tokens.css styles each of them.
+ *
+ * @return array<string,array{label:string,attr:string,options:array<string,string>}>
  */
-function hint_render_theme_toggle() {
+function hint_get_a11y_groups() {
+	return array(
+		'theme' => array(
+			'label'   => __( 'Appearance', 'hint' ),
+			'attr'    => 'theme',
+			'options' => array(
+				'light'    => __( 'Light', 'hint' ),
+				'dark'     => __( 'Dark', 'hint' ),
+				'contrast' => __( 'High contrast', 'hint' ),
+			),
+		),
+		'text'  => array(
+			'label'   => __( 'Text size', 'hint' ),
+			'attr'    => 'text',
+			'options' => array(
+				'1' => __( 'Normal', 'hint' ),
+				'2' => __( 'Large', 'hint' ),
+				'3' => __( 'Extra large', 'hint' ),
+			),
+		),
+	);
+}
+
+/**
+ * Output the accessibility panel: a trigger with the universal access icon
+ * and a popover with pressed-state buttons for appearance (light, dark, high
+ * contrast) and text size, plus a reset.
+ *
+ * Replaces the former light/dark toggle. The panel is rendered twice (desktop
+ * actions and mobile menu); state is shared through <html> attributes, and
+ * aria-pressed is filled in by assets/js/a11y.js once the saved preference is
+ * known. Without JS the panel stays closed and inert.
+ *
+ * It is a disclosure (aria-expanded + aria-controls), not a modal dialog: the
+ * panel is a labelled group, focus is free to leave it (which closes it) and
+ * Esc closes it returning focus to the trigger.
+ *
+ * @param string $id Unique id prefix, since the panel is rendered twice.
+ */
+function hint_render_a11y_panel( $id = 'hint-a11y' ) {
+	$panel_id = $id . '-panel';
+	$title_id = $id . '-title';
 	?>
-	<button
-		type="button"
-		class="hint-theme-toggle"
-		aria-disabled="true"
-		aria-label="<?php esc_attr_e( 'Light and dark theme', 'hint' ); ?>"
-		title="<?php esc_attr_e( 'Light and dark theme', 'hint' ); ?>"
-	>
-		<svg class="hint-theme-toggle__icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-			<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
-		</svg>
-	</button>
+	<div class="hint-a11y" data-hint-a11y>
+		<button
+			type="button"
+			class="hint-a11y__trigger"
+			aria-expanded="false"
+			aria-controls="<?php echo esc_attr( $panel_id ); ?>"
+			aria-label="<?php esc_attr_e( 'Accessibility options', 'hint' ); ?>"
+			title="<?php esc_attr_e( 'Accessibility options', 'hint' ); ?>"
+		>
+			<svg class="hint-a11y__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+				<circle cx="12" cy="12" r="10" />
+				<circle cx="12" cy="6.9" r="1.3" fill="currentColor" stroke="none" />
+				<path d="M6.6 9.9c3.5 1 7.3 1 10.8 0" />
+				<path d="M10.4 10.6v3.1l-1.7 4.8" />
+				<path d="M13.6 10.6v3.1l1.7 4.8" />
+				<path d="M10.4 13.7h3.2" />
+			</svg>
+		</button>
+
+		<div
+			class="hint-a11y__panel"
+			id="<?php echo esc_attr( $panel_id ); ?>"
+			role="group"
+			aria-labelledby="<?php echo esc_attr( $title_id ); ?>"
+			hidden
+		>
+			<p class="hint-a11y__title" id="<?php echo esc_attr( $title_id ); ?>"><?php esc_html_e( 'Accessibility', 'hint' ); ?></p>
+
+			<?php foreach ( hint_get_a11y_groups() as $key => $group ) : ?>
+				<?php $label_id = $id . '-' . $key . '-label'; ?>
+				<div class="hint-a11y__group" role="group" aria-labelledby="<?php echo esc_attr( $label_id ); ?>">
+					<p class="hint-a11y__label" id="<?php echo esc_attr( $label_id ); ?>"><?php echo esc_html( $group['label'] ); ?></p>
+					<div class="hint-a11y__options">
+						<?php foreach ( $group['options'] as $value => $label ) : ?>
+							<button
+								type="button"
+								class="hint-a11y__option"
+								data-a11y-<?php echo esc_attr( $group['attr'] ); ?>="<?php echo esc_attr( $value ); ?>"
+								aria-pressed="false"
+							><?php echo esc_html( $label ); ?></button>
+						<?php endforeach; ?>
+					</div>
+				</div>
+			<?php endforeach; ?>
+
+			<button type="button" class="hint-a11y__reset" data-a11y-reset><?php esc_html_e( 'Reset', 'hint' ); ?></button>
+		</div>
+	</div>
 	<?php
 }
 
@@ -338,7 +449,7 @@ function hint_render_header() {
 	<header class="hint-header" role="banner">
 		<div class="hint-header__inner">
 
-			<a class="hint-header__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+			<a class="hint-header__logo" href="<?php echo esc_url( hint_home_url() ); ?>" rel="home">
 				<img
 					src="<?php echo esc_url( $logo ); ?>"
 					alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"
@@ -355,7 +466,7 @@ function hint_render_header() {
 			<div class="hint-header__actions">
 				<?php
 				hint_render_language_flags( 'hint-lang-desktop' );
-				hint_render_theme_toggle();
+				hint_render_a11y_panel( 'hint-a11y-desktop' );
 				hint_render_header_ctas();
 				?>
 
@@ -383,7 +494,7 @@ function hint_render_header() {
 			<div class="hint-header__mobile-utils">
 				<?php
 				hint_render_language_flags( 'hint-lang-mobile' );
-				hint_render_theme_toggle();
+				hint_render_a11y_panel( 'hint-a11y-mobile' );
 				?>
 			</div>
 		</div>

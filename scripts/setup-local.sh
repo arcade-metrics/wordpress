@@ -29,7 +29,8 @@ if ! exec_wp wordpress wp core is-installed --network --url="${DOMAIN}" >/dev/nu
 fi
 
 echo "==> Configurando a rede e os sites"
-exec_wp wordpress network-setup
+# Via bash: o compose monta o script por cima do da imagem e, no Linux, o bind mount herda o modo do arquivo.
+exec_wp wordpress bash /usr/local/bin/network-setup
 
 echo
 echo "Pronto:"

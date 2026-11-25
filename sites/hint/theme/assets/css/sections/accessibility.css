@@ -1,0 +1,61 @@
+/**
+ * HINT — Accessibility section (#accessibility, .hint-section--accessibility).
+ * Loaded after sections.css; shared rules (shell, heading, copy, buttons)
+ * live there. Tokens only — no new colors beyond the design system.
+ */
+
+.hint-a11y-section__grid {
+	display: grid;
+	grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+	gap: var(--hint-space-6);
+	align-items: start;
+}
+
+.hint-home .hint-a11y-section__question {
+	margin: var(--hint-space-5) 0 var(--hint-space-2);
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h4);
+	font-weight: var(--hint-weight-semibold);
+	line-height: 1.25;
+	color: var(--hint-color-text);
+}
+
+.hint-a11y-section__aside {
+	display: grid;
+	gap: var(--hint-space-3);
+}
+
+.hint-a11y-section__card {
+	padding: var(--hint-space-3);
+	background-color: var(--hint-color-surface);
+	border: var(--hint-border-width) solid var(--hint-color-card-border);
+	border-radius: var(--hint-radius-md);
+	box-shadow: var(--hint-shadow-card);
+}
+
+.hint-home .hint-a11y-section__card-title {
+	margin: 0 0 var(--hint-space-1);
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h4);
+	font-weight: var(--hint-weight-semibold);
+	color: var(--hint-color-text);
+}
+
+.hint-home .hint-a11y-section__closing {
+	max-width: 760px;
+	margin: var(--hint-space-6) 0 0;
+	padding-top: var(--hint-space-3);
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h4);
+	font-weight: var(--hint-weight-medium);
+	line-height: 1.35;
+	color: var(--hint-color-text);
+	border-top: var(--hint-border-width) solid var(--hint-color-text);
+}
+
+@media (max-width: 1023px) {
+	.hint-a11y-section__grid {
+		grid-template-columns: minmax(0, 1fr);
+		gap: var(--hint-space-4);
+	}
+}
