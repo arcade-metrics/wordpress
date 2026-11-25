@@ -24,6 +24,7 @@ done < "${LOCK}"
 
 echo "==> Sites (${SITES})"
 existing="$(wp site list --field=domain --url="${DOMAIN}")"
+urls=()
 while read -r slug sub title; do
   [[ -z "${slug}" || "${slug}" == \#* ]] && continue
   if [[ "${sub}" == "@" ]]; then url="${DOMAIN}"; else url="${sub}.${DOMAIN}"; fi
@@ -34,9 +35,23 @@ while read -r slug sub title; do
   fi
 
   echo "--> ${slug} (${url})"
+  # O WP-CLI cria o site com http://; se a rede é https, o site também é.
+  if [[ "$(wp option get home --url="${DOMAIN}")" == https://* ]]; then
+    for opt in home siteurl; do
+      value="$(wp option get "${opt}" --url="${url}")"
+      [[ "${value}" == http://* ]] && wp option update "${opt}" "https://${value#http://}" --url="${url}" >/dev/null \
+        && echo "  ${opt}: https"
+    done
+  fi
   wp theme enable "${slug}" --network --url="${DOMAIN}" >/dev/null
   [[ "$(wp option get stylesheet --url="${url}")" == "${slug}" ]] || wp theme activate "${slug}" --url="${url}"
   wp eval-file "/opt/sites/${slug}/seed.php" --url="${url}"
+  urls+=("${url}")
 done < "${SITES}"
+
+# Regras de URL num processo novo: na primeira execução os idiomas do Polylang nascem no meio do seed, e o flush
+# feito ali ainda não conhece /en/, /es/ (o go-live de 2026-11-13 ficou com 404 até este flush).
+echo "==> Regras de URL"
+for url in "${urls[@]}"; do wp rewrite flush --url="${url}" >/dev/null; done
 
 echo "==> ok"

@@ -12,6 +12,10 @@ docker compose up -d --build --wait
 echo "==> Setup (1ª vez)"
 bash scripts/setup-local.sh
 
+# Smoke logo depois da 1ª execução: é o que acontece num servidor novo (pegou o 404 de /en/ no go-live).
+echo "==> Smoke test (após a 1ª vez)"
+bash scripts/smoke-test.sh
+
 echo "==> Setup (2ª vez, idempotência)"
 bash scripts/setup-local.sh
 
