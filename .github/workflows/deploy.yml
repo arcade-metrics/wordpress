@@ -58,6 +58,8 @@ jobs:
           context: .
           file: platform/Dockerfile
           push: true
+          build-args: |
+            RELEASE=${{ steps.tag.outputs.tag }}
           tags: |
             ${{ env.IMAGE }}:${{ steps.tag.outputs.tag }}
             ${{ env.IMAGE }}:main

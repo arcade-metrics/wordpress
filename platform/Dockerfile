@@ -70,6 +70,11 @@ COPY deploy/compose.yml          /opt/stack/compose.yml
 COPY server/                     /opt/stack/server/
 COPY scripts/smoke-test.sh       /opt/stack/scripts/smoke-test.sh
 
+# Versão desta imagem (sha-<commit>), passada pelo deploy.yml; devolvida no cabeçalho X-Release (mu-plugin release.php).
+# Fica no fim para não invalidar o cache das camadas acima a cada commit.
+ARG RELEASE=dev
+ENV WP_RELEASE=${RELEASE}
+
 RUN chmod +x /usr/local/bin/network-setup \
  && chown -R www-data:www-data "${WP_ROOT}"
 
