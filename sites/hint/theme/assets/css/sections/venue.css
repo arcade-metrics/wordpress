@@ -1,0 +1,311 @@
+/**
+ * HINT — Venue section (#venue, .hint-section--venue).
+ * Loaded after sections.css; shared rules (shell, heading, copy, buttons)
+ * live there. Tokens only — no new colors beyond the design system.
+ *
+ * Blocks: top (address + map), arrival (<details> panels), stay (regions)
+ * and city (tourism links).
+ */
+
+/* ——— Top: address + map ——— */
+.hint-venue__top {
+	display: grid;
+	grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+	gap: var(--hint-space-6);
+	align-items: stretch;
+}
+
+.hint-venue__address {
+	margin: 0;
+	padding-left: var(--hint-space-3);
+	font-style: normal;
+	border-left: calc(var(--hint-border-width) * 4) solid var(--hint-color-accent);
+}
+
+.hint-venue__name {
+	margin: 0;
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h3);
+	font-weight: var(--hint-weight-bold);
+	line-height: var(--hint-leading-heading);
+	letter-spacing: -0.03em;
+	color: var(--hint-color-text);
+}
+
+/* `.hint-home` prefix (0,2,0): keeps the bottom margin over the kit's `p` rule. */
+.hint-home .hint-venue__room {
+	margin: var(--hint-space-1) 0 var(--hint-space-3);
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h4);
+	font-weight: var(--hint-weight-medium);
+	color: var(--hint-color-text);
+}
+
+.hint-venue__address .hint-section__text {
+	overflow-wrap: anywhere;
+}
+
+.hint-home .hint-venue__highlight {
+	margin: var(--hint-space-4) 0 0;
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h4);
+	font-weight: var(--hint-weight-medium);
+	line-height: 1.35;
+	color: var(--hint-color-text);
+}
+
+.hint-venue__map {
+	min-height: 22rem;
+	overflow: hidden;
+	background-color: var(--hint-color-surface);
+	border: var(--hint-border-width) solid var(--hint-color-card-border);
+	border-radius: var(--hint-radius-md);
+}
+
+.hint-venue__map iframe {
+	display: block;
+	width: 100%;
+	height: 100%;
+	min-height: 22rem;
+	border: 0;
+}
+
+/* ——— Blocks below the top ——— */
+.hint-venue__block {
+	margin-top: var(--hint-space-6);
+	padding-top: var(--hint-space-5);
+	border-top: var(--hint-border-width) solid var(--hint-color-border);
+}
+
+.hint-home .hint-venue__subtitle {
+	margin: 0 0 var(--hint-space-3);
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h3);
+	font-weight: var(--hint-weight-bold);
+	line-height: var(--hint-leading-heading);
+	letter-spacing: -0.03em;
+	color: var(--hint-color-text);
+}
+
+.hint-home .hint-venue__intro {
+	max-width: 760px;
+	margin-bottom: var(--hint-space-4);
+}
+
+/* ——— Arrival panels (<details>) ——— */
+.hint-venue__arrival {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--hint-space-3);
+	align-items: start;
+}
+
+.hint-venue__panel {
+	background-color: var(--hint-color-surface);
+	border: var(--hint-border-width) solid var(--hint-color-card-border);
+	border-radius: var(--hint-radius-md);
+	box-shadow: var(--hint-shadow-card);
+}
+
+.hint-venue__panel-head {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--hint-space-2);
+	padding: var(--hint-space-3);
+	list-style: none;
+	cursor: pointer;
+	border-radius: var(--hint-radius-md);
+}
+
+.hint-venue__panel-head::-webkit-details-marker {
+	display: none;
+}
+
+/* Chevron: points down when closed, up when open. */
+.hint-venue__panel-head::after {
+	content: "";
+	flex: none;
+	width: 0.625rem;
+	height: 0.625rem;
+	margin: 0.375rem 0.25rem 0 auto;
+	border-right: 2px solid var(--hint-color-text);
+	border-bottom: 2px solid var(--hint-color-text);
+	transform: rotate(45deg);
+}
+
+.hint-venue__panel[open] > .hint-venue__panel-head::after {
+	margin-top: 0.625rem;
+	transform: rotate(-135deg);
+}
+
+.hint-venue__icon {
+	flex: none;
+	width: 1.75rem;
+	height: 1.75rem;
+	color: var(--hint-color-accent);
+}
+
+.hint-venue__panel-text {
+	display: grid;
+	gap: 0.25rem;
+}
+
+.hint-venue__panel-title {
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h4);
+	font-weight: var(--hint-weight-semibold);
+	line-height: 1.25;
+	color: var(--hint-color-text);
+}
+
+.hint-venue__panel-summary {
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-small);
+	line-height: 1.45;
+	color: var(--hint-color-text-secondary);
+}
+
+.hint-venue__panel-head:hover .hint-venue__panel-title {
+	color: var(--hint-color-link-hover);
+}
+
+.hint-venue__panel-body {
+	padding: 0 var(--hint-space-3) var(--hint-space-3);
+}
+
+.hint-venue__list {
+	margin: var(--hint-space-2) 0 0;
+	padding-left: 1.25rem;
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-body);
+	line-height: var(--hint-leading-body);
+	color: var(--hint-color-text-secondary);
+}
+
+.hint-venue__list li + li {
+	margin-top: 0.375rem;
+}
+
+.hint-home .hint-venue__more {
+	margin: var(--hint-space-2) 0 0;
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-body);
+	font-weight: var(--hint-weight-semibold);
+}
+
+/* ——— Where to stay ——— */
+.hint-venue__stay {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--hint-space-3);
+}
+
+.hint-venue__region {
+	padding: var(--hint-space-3);
+	background-color: var(--hint-color-surface);
+	border: var(--hint-border-width) solid var(--hint-color-card-border);
+	border-radius: var(--hint-radius-md);
+	box-shadow: var(--hint-shadow-card);
+}
+
+.hint-home .hint-venue__tag {
+	margin: 0 0 var(--hint-space-1);
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-small);
+	font-weight: var(--hint-weight-semibold);
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--hint-color-text-secondary);
+}
+
+.hint-home .hint-venue__region-title {
+	margin: 0 0 var(--hint-space-2);
+	font-family: var(--hint-font-heading);
+	font-size: var(--hint-text-h4);
+	font-weight: var(--hint-weight-semibold);
+	line-height: 1.25;
+	color: var(--hint-color-text);
+}
+
+.hint-venue__region .hint-section__actions--row {
+	margin-top: var(--hint-space-3);
+}
+
+.hint-home .hint-venue__disclaimer {
+	max-width: 760px;
+	margin: var(--hint-space-3) 0 0;
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-small);
+	line-height: 1.5;
+	color: var(--hint-color-text-secondary);
+}
+
+/* ——— Discover São Paulo ——— */
+.hint-venue__city {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0 var(--hint-space-5);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border-top: var(--hint-border-width) solid var(--hint-color-text);
+}
+
+.hint-venue__city-item {
+	display: flex;
+	align-items: center;
+	gap: var(--hint-space-3);
+	margin: 0;
+	padding-block: var(--hint-space-3);
+	border-bottom: var(--hint-border-width) solid var(--hint-color-border);
+}
+
+.hint-venue__city-image {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 3.5rem;
+	height: 3.5rem;
+	background-color: var(--hint-color-surface);
+	border: var(--hint-border-width) solid var(--hint-color-card-border);
+	border-radius: var(--hint-radius-md);
+}
+
+.hint-venue__city-body {
+	display: grid;
+	gap: 0.25rem;
+}
+
+.hint-venue__city-link {
+	font-family: var(--hint-font-heading);
+	font-size: 1.25rem;
+	font-weight: var(--hint-weight-medium);
+}
+
+.hint-venue__city-text {
+	font-family: var(--hint-font-body);
+	font-size: var(--hint-text-body);
+	line-height: var(--hint-leading-body);
+	color: var(--hint-color-text-secondary);
+}
+
+/* ——— Responsive ——— */
+@media (max-width: 1023px) {
+	.hint-venue__top {
+		grid-template-columns: minmax(0, 1fr);
+		gap: var(--hint-space-4);
+	}
+}
+
+@media (max-width: 767px) {
+	.hint-venue__arrival,
+	.hint-venue__stay,
+	.hint-venue__city {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.hint-venue__map,
+	.hint-venue__map iframe {
+		min-height: 18rem;
+	}
+}

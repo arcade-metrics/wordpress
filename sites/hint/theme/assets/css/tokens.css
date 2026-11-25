@@ -4,11 +4,19 @@
  *
  * Source of truth for the visual system used alongside Elementor Site Settings.
  * Style: minimalista, editorial, tecnológico e humano (Slush, mais sóbrio).
+ *
+ * Accessibility modes are attributes on <html>, set by assets/js/a11y.js
+ * (and by the inline script in functions.php before first paint):
+ *   data-theme="light|dark|contrast"  — palette (defaults follow the system)
+ *   data-text="1|2|3"                 — root font-size 100% / 125% / 150%
+ * Every size below is in rem so the text-size levels scale the whole system;
+ * only layout widths and breakpoints stay in px.
  */
 
 :root {
 	/* ——— Colors ——— */
 	--hint-color-bg: #F7F6F2;
+	--hint-color-surface: #ffffff;
 	--hint-color-text: #111111;
 	--hint-color-text-secondary: #666663;
 	/* Brand blue + global hover (chrome, links, buttons). */
@@ -18,6 +26,13 @@
 	--hint-color-accent-on-dark: var(--hint-color-accent);
 	--hint-color-border: #D9D9D4;
 	--hint-color-on-accent: #111111;
+	--hint-color-on-accent-hover: #ffffff;
+	--hint-color-link: var(--hint-color-accent);
+	--hint-color-link-hover: var(--hint-color-accent-hover);
+
+	/* Focus ring (contrast mode makes it yellow and thicker). */
+	--hint-color-focus: currentColor;
+	--hint-focus-width: 2px;
 
 	/* Aliases (readable intent) */
 	--hint-color-background: var(--hint-color-bg);
@@ -33,26 +48,26 @@
 	--hint-weight-semibold: 600;
 	--hint-weight-bold: 700;
 
-	/* Desktop type scale */
-	--hint-text-h1: 64px;
-	--hint-text-h2: 48px;
-	--hint-text-h3: 32px;
-	--hint-text-h4: 24px;
-	--hint-text-body: 18px;
-	--hint-text-small: 14px;
+	/* Desktop type scale (64 / 48 / 32 / 24 / 18 / 14 px at 100%). */
+	--hint-text-h1: 4rem;
+	--hint-text-h2: 3rem;
+	--hint-text-h3: 2rem;
+	--hint-text-h4: 1.5rem;
+	--hint-text-body: 1.125rem;
+	--hint-text-small: 0.875rem;
 
 	--hint-leading-heading: 1.1;
 	--hint-leading-body: 1.6;
 
-	/* ——— Spacing scale (8-based) ——— */
-	--hint-space-1: 8px;
-	--hint-space-2: 16px;
-	--hint-space-3: 24px;
-	--hint-space-4: 32px;
-	--hint-space-5: 48px;
-	--hint-space-6: 64px;
-	--hint-space-7: 96px;
-	--hint-space-8: 128px;
+	/* ——— Spacing scale (8-based: 8 / 16 / 24 / 32 / 48 / 64 / 96 / 128 px) ——— */
+	--hint-space-1: 0.5rem;
+	--hint-space-2: 1rem;
+	--hint-space-3: 1.5rem;
+	--hint-space-4: 2rem;
+	--hint-space-5: 3rem;
+	--hint-space-6: 4rem;
+	--hint-space-7: 6rem;
+	--hint-space-8: 8rem;
 
 	/* ——— Geometry ——— */
 	--hint-radius-sm: 4px;
@@ -62,13 +77,85 @@
 
 	/* ——— Elevation (intentionally flat) ——— */
 	--hint-shadow: none;
+	/* Cards: a soft shadow in light/dark, a border in high contrast. */
+	--hint-shadow-card: 0 1px 2px rgba(17, 17, 17, 0.06);
+	--hint-color-card-border: var(--hint-color-border);
 }
 
 @media (max-width: 767px) {
 	:root {
-		--hint-text-h1: 42px;
-		--hint-text-h2: 36px;
-		--hint-text-h3: 28px;
-		--hint-text-body: 16px;
+		--hint-text-h1: 2.625rem;
+		--hint-text-h2: 2.25rem;
+		--hint-text-h3: 1.75rem;
+		--hint-text-body: 1rem;
 	}
+}
+
+/* ——— Text size (data-text) ——— */
+:root[data-text="2"] {
+	font-size: 125%;
+}
+
+:root[data-text="3"] {
+	font-size: 150%;
+}
+
+/* ——— Dark theme (data-theme="dark") ——— */
+:root[data-theme="dark"] {
+	color-scheme: dark;
+
+	--hint-color-bg: #111111;
+	--hint-color-surface: #1a1a19;
+	--hint-color-text: #f2f2ef;
+	--hint-color-text-secondary: #b3b3ad;
+	--hint-color-accent-dark: #0a0a0a;
+	--hint-color-border: #3a3a37;
+	--hint-color-on-accent: #111111;
+	--hint-color-on-accent-hover: #ffffff;
+	--hint-color-link: var(--hint-color-accent);
+	--hint-color-link-hover: var(--hint-color-accent-hover);
+	--hint-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+	--hint-color-card-border: var(--hint-color-border);
+}
+
+/* ——— High contrast (data-theme="contrast") ———
+ * Pure black / white, every pair at 7:1 or better (WCAG AAA):
+ * #ffffff on #000000 = 21:1, #03e8fc on #000000 = 14.7:1,
+ * #ffd500 on #000000 = 15.1:1, #000000 on #03e8fc = 14.7:1.
+ * The brand pink hover (#f5119e, 4.6:1 on black) is replaced by yellow.
+ */
+:root[data-theme="contrast"] {
+	color-scheme: dark;
+
+	--hint-color-bg: #000000;
+	--hint-color-surface: #000000;
+	--hint-color-text: #ffffff;
+	--hint-color-text-secondary: #ffffff;
+	--hint-color-accent: #03e8fc;
+	--hint-color-accent-hover: #ffd500;
+	--hint-color-accent-dark: #000000;
+	--hint-color-accent-on-dark: #03e8fc;
+	--hint-color-border: #ffffff;
+	--hint-color-on-accent: #000000;
+	--hint-color-on-accent-hover: #000000;
+	--hint-color-link: #03e8fc;
+	--hint-color-link-hover: #ffd500;
+
+	--hint-color-focus: #ffd500;
+	--hint-focus-width: 3px;
+
+	--hint-border-width: 2px;
+	--hint-shadow: none;
+	--hint-shadow-card: none;
+	--hint-color-card-border: #ffffff;
+
+	/* Chrome (header/footer) tokens declared in header.css: solid black. */
+	--hint-chrome-bg: #000000;
+	--hint-header-bg: #000000;
+	--hint-chrome-fg: #ffffff;
+	--hint-chrome-fg-muted: #ffffff;
+	--hint-chrome-border: #ffffff;
+	--hint-chrome-panel: #000000;
+	--hint-chrome-accent: #03e8fc;
+	--hint-chrome-accent-hover: #ffd500;
 }

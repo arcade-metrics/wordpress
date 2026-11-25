@@ -165,6 +165,28 @@ function hint_render_footer_admin_link() {
 }
 
 /**
+ * VLibras widget container (official gov.br markup).
+ *
+ * The plugin script and its init call are enqueued by hint_enqueue_assets()
+ * when hint_show_vlibras() allows it; this prints the host element before
+ * the footer scripts run. The widget keeps its own floating button.
+ */
+function hint_render_vlibras() {
+	if ( ! hint_show_vlibras() ) {
+		return;
+	}
+	?>
+	<div vw class="enabled">
+		<div vw-access-button class="active"></div>
+		<div vw-plugin-wrapper>
+			<div class="vw-plugin-top-wrapper"></div>
+		</div>
+	</div>
+	<?php
+}
+add_action( 'wp_footer', 'hint_render_vlibras', 5 );
+
+/**
  * Output the site footer.
  */
 function hint_render_footer() {

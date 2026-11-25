@@ -53,7 +53,10 @@
 	margin: 0;
 }
 
-.hint-hero__brand {
+/* The brand is the page's <h1>: the `.hint-hero` prefix (0,2,0) outweighs the
+ * Elementor kit's `.elementor-kit-N h1` px typography and #111 color (0,1,1). */
+.hint-hero .hint-hero__brand {
+	margin: 0;
 	font-family: var(--hint-font-heading);
 	font-size: clamp(4rem, 12vw, 7.5rem);
 	font-weight: var(--hint-weight-bold);
@@ -124,8 +127,79 @@
 	gap: var(--hint-space-2);
 }
 
+/* ——— Pause / play control (WCAG 2.2.2: moving content must be pausable) ———
+ * Toggle button: aria-pressed="true" means the video is paused. Scoped under
+ * .hint-hero to outweigh Elementor's `.elementor-kit-N button` rule.
+ */
+.hint-hero .hint-hero__play {
+	position: absolute;
+	z-index: 3;
+	right: var(--hint-space-3);
+	bottom: var(--hint-space-3);
+	appearance: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	padding: 0;
+	margin: 0;
+	color: #ffffff;
+	background: rgba(0, 0, 0, 0.4);
+	background-image: none;
+	border: var(--hint-border-width) solid rgba(255, 255, 255, 0.7);
+	border-radius: 50%;
+	box-shadow: none;
+	cursor: pointer;
+	transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.hint-hero .hint-hero__play:hover,
+.hint-hero .hint-hero__play:focus-visible {
+	background: rgba(0, 0, 0, 0.6);
+	border-color: var(--hint-color-accent-hover);
+	color: var(--hint-color-accent-hover);
+}
+
+.hint-hero__play-icon {
+	display: block;
+	width: 1.125rem;
+	height: 1.125rem;
+}
+
+/* Icon swap: pause while playing, play while paused. */
+.hint-hero__play[aria-pressed="true"] .hint-hero__play-icon--pause,
+.hint-hero__play[aria-pressed="false"] .hint-hero__play-icon--play {
+	display: none;
+}
+
+/* The video starts paused with reduced motion (assets/js/a11y.js marks it
+ * data-ready once it is in control); if that script never runs the video
+ * would still autoplay, so hide it until then. */
 @media (prefers-reduced-motion: reduce) {
-	.hint-hero__video {
+	.hint-hero__video:not([data-ready]) {
 		display: none;
 	}
+}
+
+/* ——— High contrast: no video, no overlay, solid black, pure white text ——— */
+:root[data-theme="contrast"] .hint-hero {
+	background-color: #000000;
+}
+
+:root[data-theme="contrast"] .hint-hero__video,
+:root[data-theme="contrast"] .hint-hero__overlay,
+:root[data-theme="contrast"] .hint-hero .hint-hero__play {
+	display: none;
+}
+
+:root[data-theme="contrast"] .hint-hero__tagline,
+:root[data-theme="contrast"] .hint-hero__where,
+:root[data-theme="contrast"] .hint-hero__theme {
+	color: #ffffff;
+}
+
+:root[data-theme="contrast"] a.hint-button.hint-button--ghost {
+	border-color: #ffffff;
+	border-width: 2px;
 }

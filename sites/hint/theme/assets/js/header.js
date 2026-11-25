@@ -5,7 +5,7 @@
 ( function () {
 	'use strict';
 
-	var BREAKPOINT = 900;
+	var BREAKPOINT = 900; // Smallest breakpoint in header.css; larger text sizes switch earlier.
 
 	function initMobileMenu() {
 		var toggle = document.querySelector( '.hint-header__toggle' );
@@ -41,8 +41,12 @@
 			}
 		} );
 
+		// The toggle is shown by CSS breakpoints that depend on the text-size
+		// level (header.css), so "desktop" means the toggle is not displayed.
 		window.addEventListener( 'resize', function () {
-			if ( window.innerWidth > BREAKPOINT && toggle.getAttribute( 'aria-expanded' ) === 'true' ) {
+			var isDesktop = window.innerWidth > BREAKPOINT && 'none' === window.getComputedStyle( toggle ).display;
+
+			if ( isDesktop && toggle.getAttribute( 'aria-expanded' ) === 'true' ) {
 				setOpen( false );
 			}
 		} );
@@ -96,13 +100,15 @@
 			} );
 		}
 
+		// Capture phase, so a click on another header widget (which may stop
+		// propagation) still closes the language menu.
 		document.addEventListener( 'click', function ( event ) {
 			controllers.forEach( function ( controller ) {
 				if ( ! controller.element.contains( event.target ) ) {
 					controller.setOpen( false );
 				}
 			} );
-		} );
+		}, true );
 
 		document.addEventListener( 'keydown', function ( event ) {
 			if ( 'Escape' !== event.key ) {

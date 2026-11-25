@@ -19,7 +19,7 @@ Status: **rascunho** → **aprovada** (humano) → **implementada** (critérios 
 | 09 | Recursos e observabilidade | server-ops | a escrever | Pico de memória do stack < 700 MB; alerta se um site cair |
 | 10 | E-mail (SES) | platform-engineer | a escrever | E-mail de teste entregue a partir de cada site |
 | 20 | Site ciatec | theme-ciatec | a escrever | Visual idêntico ao tema importado (screenshots nos 3 idiomas) |
-| 21 | Site hint | theme-hint | a escrever | Idem (seletor de idiomas pelo Polylang no lugar do TranslatePress) |
+| 21 | [Site hint](21-site-hint.md) | theme-hint | rascunho | Fase 2: i18n PT/EN, painel de acessibilidade (AAA, texto 150%), 6 seções da home, conteúdo do HINT 2027 |
 
 ## Fases do projeto
 

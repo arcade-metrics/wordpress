@@ -2,6 +2,10 @@
  * HINT Base
  * Soft visual rules for the Hello Elementor + Elementor Free stack.
  * Does not build pages — only reinforces the design system.
+ *
+ * Theme modes (data-theme on <html>, see tokens.css) are applied here for
+ * everything outside the header: page background, text, headings, links,
+ * focus ring and the high-contrast guarantees.
  */
 
 html {
@@ -45,3 +49,106 @@ img {
 .hint-space-y-4 > * + * { margin-top: var(--hint-space-4); }
 .hint-space-y-5 > * + * { margin-top: var(--hint-space-5); }
 .hint-space-y-6 > * + * { margin-top: var(--hint-space-6); }
+
+/* ——— Theme modes ———
+ * Elementor prints its kit colors as `.elementor-kit-N …` (body, headings,
+ * links). The `:root[data-theme]` prefix outweighs them so the tokens win
+ * once a mode is applied (the inline script sets one before first paint).
+ */
+:root[data-theme] body {
+	background-color: var(--hint-color-bg);
+	color: var(--hint-color-text);
+}
+
+/* Elementor paints headings #111 (`.elementor-kit-N h2`), invisible on the
+ * dark and contrast backgrounds. Sections that need another heading color
+ * must use a token and at least this specificity (0,2,1). */
+:root[data-theme] .hint-home :is(h1, h2, h3, h4, h5, h6) {
+	color: var(--hint-color-text);
+}
+
+/* Content links: the kit paints every `a` brand cyan (#03e8fc, ~1.5:1 on the
+ * light surfaces), so links in the sections take the text color and only the
+ * hover uses the brand token. Buttons keep their own colors. */
+:root[data-theme] .hint-home a:not(.hint-button) {
+	color: var(--hint-color-text);
+}
+
+:root[data-theme] .hint-home a:not(.hint-button):hover,
+:root[data-theme] .hint-home a:not(.hint-button):focus-visible {
+	color: var(--hint-color-link-hover);
+}
+
+/* Contrast enforces its own link color (cyan on black, 14.7:1). */
+:root[data-theme="contrast"] .hint-home a:not(.hint-button) {
+	color: var(--hint-color-link);
+}
+
+:root[data-theme="contrast"] .hint-home a:not(.hint-button):hover,
+:root[data-theme="contrast"] .hint-home a:not(.hint-button):focus-visible {
+	color: var(--hint-color-link-hover);
+}
+
+/* Elementor prints `.elementor-kit-N p { margin-block-end: 24px }` (0,1,1),
+ * which outweighs the `margin: 0` of any single-class rule. Neutralise it once
+ * at (0,1,2) and let each component set its own spacing; a component that
+ * needs a bottom margin on a <p> uses a two-class selector (0,2,0). */
+html .hint-hero p,
+html .hint-home p,
+html .hint-header p,
+html .hint-footer p {
+	margin-block-end: 0;
+}
+
+/* The kit also prints h1–h6 typography in px (0,1,1): heading rules in the
+ * sections are prefixed with `.hint-home` / `.hint-hero` (0,2,0) so the rem
+ * tokens win and scale with data-text. */
+
+/* Visible focus everywhere (Hello Elementor's reset leaves it to the browser). */
+:root[data-theme] :focus-visible {
+	outline: var(--hint-focus-width) solid var(--hint-color-focus);
+	outline-offset: 2px;
+}
+
+/* ——— High contrast ——— */
+:root[data-theme="contrast"] a {
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	text-decoration-thickness: from-font;
+}
+
+/* Buttons keep their shape; the 2px border carries the affordance. */
+:root[data-theme="contrast"] a.hint-button,
+:root[data-theme="contrast"] a.elementor-button {
+	text-decoration: none;
+	border-width: 2px;
+}
+
+:root[data-theme="contrast"] a.hint-button:hover,
+:root[data-theme="contrast"] a.hint-button:focus-visible,
+:root[data-theme="contrast"] .hint-button:hover,
+:root[data-theme="contrast"] .hint-button:focus-visible {
+	text-decoration: underline;
+}
+
+/* Filled buttons hover to yellow: text must go black (white on yellow fails). */
+:root[data-theme="contrast"] a.hint-button.hint-button--solid:hover,
+:root[data-theme="contrast"] a.hint-button.hint-button--solid:focus-visible,
+:root[data-theme="contrast"] a.hint-button.hint-button--primary:hover,
+:root[data-theme="contrast"] a.hint-button.hint-button--primary:focus-visible {
+	background-color: var(--hint-color-accent-hover);
+	border-color: var(--hint-color-accent-hover);
+	color: var(--hint-color-on-accent-hover);
+}
+
+/* No text over imagery, no shadows, no gradients. Cards: sections should use
+ * `box-shadow: var(--hint-shadow-card)` and `border: var(--hint-border-width)
+ * solid var(--hint-color-card-border)`, which become no shadow + white border
+ * here; this blanket rule covers anything that hard-codes a shadow or image. */
+:root[data-theme="contrast"] .hint-home *,
+:root[data-theme="contrast"] .hint-home *::before,
+:root[data-theme="contrast"] .hint-home *::after {
+	box-shadow: none !important;
+	text-shadow: none !important;
+	background-image: none !important;
+}
